@@ -85,7 +85,7 @@
               selected = rectArr[i];
               let newRectArr = rectArr.filter((item) => !item.selected);
               for (let i = 0; i < newRectArr.length; i++) {
-                if (selected.y >= platform.y - platform.h) {
+                if (selected.y > platform.y - platform.h) {
                   selected.y = platform.y - platform.h;
                 } else if (
                   selected.x + selected.w > newRectArr[i].x &&
