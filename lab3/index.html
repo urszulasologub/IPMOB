@@ -28,40 +28,55 @@
         canv.height = (window.innerHeight / 100) * 95;
         let rectArr = [];
         let platform = new Rect(0, canv.height * 0.9, canv.width * 0.8, 50);
-        let button = new Rect(canv.width * 0.8, canv.height * 0.1, canv.width * 0.2, canv.height * 0.1);
+        let button = new Rect(
+          canv.width * 0.8,
+          canv.height * 0.1,
+          canv.width * 0.2,
+          canv.height * 0.1
+        );
         let current_key = 0;
 
-        canvas.addEventListener('click', function(event) {
-          var x = event.pageX - (innerWidth / 100) * 2.5,
+        canvas.addEventListener(
+          "click",
+          function (event) {
+            var x = event.pageX - (innerWidth / 100) * 2.5,
               y = event.pageY - (innerHeight / 100) * 2.5;
-          if (
-            x > button.x && x < button.x + button.w && 
-            y > button.y && y < button.y + button.h
-          ) {
-            spawnBox();
-          }
-        }, false);
+            if (
+              x > button.x &&
+              x < button.x + button.w &&
+              y > button.y &&
+              y < button.y + button.h
+            ) {
+              spawnBox();
+            }
+          },
+          false
+        );
 
         function spawnBox() {
           let rect = new Rect(
-              canv.width * 0.8 + Math.floor(Math.random() * canv.width * 0.15),
-              canv.height * 0.2 + Math.floor(Math.random() * canv.height * 0.7),
-              50,
-              50
+            canv.width * 0.8 + Math.floor(Math.random() * canv.width * 0.15),
+            canv.height * 0.2 + Math.floor(Math.random() * canv.height * 0.7),
+            50,
+            50
           );
           rect.key = current_key++;
           rect.selected = true;
           rectArr.push(rect);
           let error = 0;
           while (selectedInrect(rect)) {
-            rect.x = canv.width * 0.8 + Math.floor(Math.random() * canv.width * 0.15);
-            rect.y = canv.height * 0.2 + Math.floor(Math.random() * canv.height * 0.7);
+            rect.x =
+              canv.width * 0.8 + Math.floor(Math.random() * canv.width * 0.15);
+            rect.y =
+              canv.height * 0.2 + Math.floor(Math.random() * canv.height * 0.7);
             ++error;
             if (error > 100) {
-              delete(rect);
+              delete rect;
               rectArr.pop();
               current_key--;
-              window.alert("Too many boxes in spawn area. Unable to spawn a box.");
+              window.alert(
+                "Too many boxes in spawn area. Unable to spawn a box."
+              );
               break;
             }
           }
@@ -114,49 +129,84 @@
           );
         }
 
+        function collidesUp(selected, rectArr) {
+          let newRectArr = rectArr.filter((item) => item != selected);
+          let ret = false;
+          for (let i = 0; i < newRectArr.length; i++) {
+            if (
+              selected.x + selected.w > newRectArr[i].x &&
+              selected.x < newRectArr[i].x + newRectArr[i].w &&
+              selected.y + selected.h > newRectArr[i].y &&
+              selected.y < newRectArr[i].y
+            ) {
+              selected.x = newRectArr[i].x;
+              selected.y = newRectArr[i].y - newRectArr[i].w - 1;
+              ret = true;
+            }
+          }
+          return ret;
+        }
+
+        function collidesRight(selected, rectArr) {
+          let newRectArr = rectArr.filter((item) => item != selected);
+          let ret = false;
+          for (let i = 0; i < newRectArr.length; i++) {
+            if (
+              selected.x > newRectArr[i].x + newRectArr[i].w / 2 &&
+              selected.x <= newRectArr[i].x + newRectArr[i].w &&
+              selected.y + selected.h > newRectArr[i].y &&
+              selected.y < newRectArr[i].y + newRectArr[i].h
+            ) {
+              selected.x = newRectArr[i].x + selected.w + 1;
+              selected.y = newRectArr[i].y;
+              ret = true;
+            }
+          }
+          return ret;
+        }
+
+        function collidesLeft(selected, rectArr) {
+          let newRectArr = rectArr.filter((item) => item != selected);
+          let ret = false;
+          for (let i = 0; i < newRectArr.length; i++) {
+            if (
+              selected.x >= newRectArr[i].x - newRectArr[i].w &&
+              selected.x < newRectArr[i].x &&
+              selected.y + selected.h > newRectArr[i].y &&
+              selected.y < newRectArr[i].y + newRectArr[i].h
+            ) {
+              selected.x = newRectArr[i].x - selected.w - 1;
+              selected.y = newRectArr[i].y;
+              ret = true;
+            }
+          }
+          return ret;
+        }
+
         function selectedInrect(rect) {
           for (let i = 0; i < rectArr.length; i++) {
             if (rectArr[i].selected) {
               selected = rectArr[i];
-              let newRectArr = rectArr.filter((item) => !item.selected);
-              for (let i = -1; i < newRectArr.length; i++) {
-                if (
-                  selected.y > platform.y - platform.h && 
-                  selected.x < platform.x + platform.w
-                ) {
-                  selected.y = platform.y - platform.h;
-                  return false;
-                } else if ( (i >= 0) &&
-                  selected.x + selected.w > newRectArr[i].x &&
-                  selected.x < newRectArr[i].x + newRectArr[i].w &&
-                  selected.y + selected.h > newRectArr[i].y &&
-                  selected.y < newRectArr[i].y
-                ) {
-                  selected.x = newRectArr[i].x;
-                  selected.y = newRectArr[i].y - newRectArr[i].w;
-                  return true;
-                } else if ( (i >= 0) &&
-                  selected.x >= newRectArr[i].x - (newRectArr[i].w / 2) && 
-                  selected.x <= newRectArr[i].x + newRectArr[i].w && 
-                  selected.y + selected.h > newRectArr[i].y &&
-                  selected.y < newRectArr[i].y + newRectArr[i].h
-                ) {
-                  selected.x = newRectArr[i].x + newRectArr[i].w;
-                  selected.y = newRectArr[i].y;  
-                  return true;           
-                } else if ( (i >= 0) &&
-                  selected.x >= newRectArr[i].x - newRectArr[i].w && 
-                  selected.x <= newRectArr[i].x + newRectArr[i].w && 
-                  selected.y + selected.h > newRectArr[i].y &&
-                  selected.y < newRectArr[i].y + newRectArr[i].h
-                ) {
-                  selected.x = newRectArr[i].x - newRectArr[i].w;
-                  selected.y = newRectArr[i].y;  
-                  return true;           
-                }
-              
+              if (
+                selected.y > platform.y - platform.h &&
+                selected.x < platform.x + platform.w
+              ) {
+                selected.y = platform.y - platform.h;
+                return false;
               }
             }
+          }
+          if (collidesUp(selected, rectArr)) {
+            console.log("up");
+            return true;
+          }
+          if (collidesRight(selected, rectArr)) {
+            console.log("right");
+            return true;
+          }
+          if (collidesLeft(selected, rectArr)) {
+            console.log("left");
+            return true;
           }
           return false;
         }
@@ -195,7 +245,11 @@
           ctx.font = "30px Comic Sans MS";
           ctx.fillStyle = "red";
           ctx.textAlign = "center";
-          ctx.fillText("Spawn", button.x + (canv.width * 0.1), button.y + (canv.height * 0.06));
+          ctx.fillText(
+            "Spawn",
+            button.x + canv.width * 0.1,
+            button.y + canv.height * 0.06
+          );
           for (let i = 0; i < rectArr.length; i++) {
             rectArr[i].draw();
 
