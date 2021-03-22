@@ -26,6 +26,7 @@
         const ctx = canv.getContext("2d");
         canv.width = (window.innerWidth / 100) * 95;
         canv.height = (window.innerHeight / 100) * 95;
+        let platform = new Rect(0, canv.height * 0.9, canv.width, 50);
 
         function getRandomColor() {
           var letters = "0123456789ABCDEF";
@@ -84,7 +85,9 @@
               selected = rectArr[i];
               let newRectArr = rectArr.filter((item) => !item.selected);
               for (let i = 0; i < newRectArr.length; i++) {
-                if (
+                if (selected.y >= platform.y - platform.h) {
+                  selected.y = platform.y - platform.h;
+                }else if (
                   selected.x + selected.w > newRectArr[i].x &&
                   selected.x < newRectArr[i].x + newRectArr[i].w &&
                   selected.y + selected.h > newRectArr[i].y &&
@@ -128,6 +131,7 @@
 
         setInterval(function () {
           ctx.clearRect(0, 0, canv.width, canv.height);
+          platform.draw();
           for (let i = 0; i < rectArr.length; i++) {
             rectArr[i].draw();
 
