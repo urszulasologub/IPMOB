@@ -1,114 +1,136 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
     <title>Lab3</title>
     <style>
       body {
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        background-color: #f0f0f0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #canvas {
+        margin: 0 auto;
+        border: 1px #000 solid;
       }
     </style>
   </head>
   <body>
-    <div id="container"></div>
-    <canvas></canvas>
+    <canvas id="canvas"> </canvas>
+
+    <script>
+      (function () {
+        const canv = document.getElementById("canvas");
+        const ctx = canv.getContext("2d");
+        canv.width = (window.innerWidth / 100) * 95;
+        canv.height = (window.innerHeight / 100) * 95;
+
+        function Rect(x, y, w, h, key) {
+          this.x = x;
+          this.y = y;
+          this.w = w;
+          this.h = h;
+          this.key = key;
+          this.selected = false;
+          this.initialPosition = {};
+
+          this.draw = function () {
+            ctx.fillStyle = "#ccc";
+            ctx.fillRect(this.x, this.y, this.w, this.h);
+          };
+
+          this.drawRed = function () {
+            ctx.fillStyle = "#f60606";
+            ctx.fillRect(this.x, this.y, this.w, this.h);
+          };
+        }
+
+        let rectArr = [];
+
+        for (let i = 0; i < 6; i++) {
+          rectArr.push(new Rect(50, 50 + i * 70, 50 + i * 50, 50));
+          rectArr[i].key = i;
+        }
+
+        let cursor = {
+          x: 0,
+          y: 0,
+        };
+
+        function cursorInrect(rect) {
+          return (
+            cursor.x > rect.x &&
+            cursor.x < rect.x + rect.w &&
+            cursor.y > rect.y &&
+            cursor.y < rect.y + rect.h
+          );
+        }
+
+        function selectedInrect(rect) {
+          for (let i = 0; i < rectArr.length; i++) {
+            if (rectArr[i].selected) {
+              selected = rectArr[i];
+              let newRectArr = rectArr.filter((item) => !item.selected);
+              for (let i = 0; i < newRectArr.length; i++) {
+                if (
+                  selected.x + selected.w > newRectArr[i].x &&
+                  selected.x < newRectArr[i].x + newRectArr[i].w &&
+                  selected.y + selected.h > newRectArr[i].y &&
+                  selected.y < newRectArr[i].y + newRectArr[i].h
+                ) {
+                  newRectArr[i].drawRed();
+                  return true;
+                }
+              }
+            }
+          }
+        }
+
+        onmousedown = () => {
+          for (let i = 0; i < rectArr.length; i++) {
+            if (cursorInrect(rectArr[i])) {
+              rectArr[i].selected = true;
+              rectArr[i].initialPosition.x = rectArr[i].x;
+              rectArr[i].initialPosition.y = rectArr[i].y;
+              rectArr[i].initialPosition.key = rectArr[i].key;
+            }
+          }
+        };
+
+        onmousemove = (e) => {
+          cursor.x = e.pageX - (innerWidth / 100) * 2.5;
+          cursor.y = e.pageY - (innerHeight / 100) * 2.5;
+        };
+
+        onmouseup = () => {
+          for (let i = 0; i < rectArr.length; i++) {
+            if (rectArr[i].selected && selectedInrect(rectArr[i])) {
+              rectArr[i].x = rectArr[i].initialPosition.x;
+              rectArr[i].y = rectArr[i].initialPosition.y;
+            }
+
+            if (rectArr[i].selected) rectArr[i].selected = !rectArr[i].selected;
+          }
+        };
+
+        setInterval(function () {
+          ctx.clearRect(0, 0, canv.width, canv.height);
+          for (let i = 0; i < rectArr.length; i++) {
+            rectArr[i].draw();
+
+            if (rectArr[i].selected) {
+              rectArr[i].x = cursor.x - rectArr[i].w / 2;
+              rectArr[i].y = cursor.y - rectArr[i].h / 2;
+            }
+
+            if (selectedInrect(rectArr[i])) {
+              selected.drawRed();
+            }
+          }
+        }, 0);
+      })();
+    </script>
   </body>
-  <script>
-    /// initialization
-    const canvas = document.querySelector('canvas');
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    const ctx = canvas.getContext('2d');
-    var boxes = [];
-    ///
-
-    function getRandomColor() {
-      var letters = '0123456789ABCDEF';
-      var color = '#';
-      for (var i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-      }
-      return color;
-    }
-
-    function spawnBox(width, height, boxes) {
-      boxes.push({
-        w: width, 
-        h: height,
-        color: getRandomColor(),
-        x: 0,
-        y: 0,
-      });
-    }
-
-    function drawBoxes(ctx, boxes) {
-      for(let i = 0; i < boxes.length; ++i) {
-        ctx.fillStyle = boxes[i].color;
-        ctx.fillRect(boxes[i].x, boxes[i].y, boxes[i].w, boxes[i].h);
-      }
-    }
-
-    function mouseDown(e) {
-    	var bRect = canvas.getBoundingClientRect();
-    	mouseX = (e.clientX - bRect.left);
-    	mouseY = (e.clientY - bRect.top);
-    	for (let i = 0; i < boxes.length; i++) {
-    		if (inCircle(boxes[i], mouseX, mouseY)) {
-    			drag = true;
-    			dragHoldX = mouseX - boxes[i].x;
-    			dragHoldY = mouseY - boxes[i].y;
-    			dragIndex = i;
-    		}
-    	}
-    	if (drag) {
-    		window.addEventListener("mousemove", mouseMove, false);
-    	}
-    	canvas.removeEventListener("mousedown", mouseDown, false);
-    	window.addEventListener("mouseup", mouseUp, false);
-    	return false;		
-    }
-
-    function mouseMove(e) {
-    	var posX, posY;
-     
-    	var bRect = canvas.getBoundingClientRect();
-    	mouseX = (e.clientX - bRect.left);
-    	mouseY = (e.clientY - bRect.top);
-    	
-    	posX = mouseX - dragHoldX;
-    	posY = mouseY - dragHoldY;
-    	
-    	boxes[dragIndex].x = posX;
-    	boxes[dragIndex].y = posY;
-    	
-    	ctx.clearRect(0,0,canvas.width, canvas.height);
-    	drawPlatform();
-    	drawBoxes();
-    }
-
-    function mouseUp() {
-    	canvas.addEventListener("mousedown", mouseDown, false);
-    	window.removeEventListener("mouseup", mouseUp, false);
-    	if (drag) {
-    		drag = false;
-    		window.removeEventListener("mousemove", mouseMove, false);
-    	}
-    }
-    canvas.addEventListener("mousedown", mouseDown, false);
-
-    function inCircle(box, mx ,my) {
-      var imageData = ctx.getImageData(mx, my, 1, 1), index = (mx + my * imageData.width) * 4;
-      return (imageData.data[3] > 0 && box.color=="rgb(" + imageData.data[0] + "," + imageData.data[1] + "," + imageData.data[2] +")");
-    }
-
-    /// calls
-    spawnBox(50, 50, boxes);
-    drawBoxes(ctx, boxes);
-    canvas.addEventListener("mousedown", mouseDown, false);
-    ///
-  </script>
 </html>
