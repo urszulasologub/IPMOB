@@ -119,14 +119,14 @@
             if (rectArr[i].selected) {
               selected = rectArr[i];
               let newRectArr = rectArr.filter((item) => !item.selected);
-              for (let i = 0; i < newRectArr.length; i++) {
+              for (let i = -1; i < newRectArr.length; i++) {
                 if (
                   selected.y > platform.y - platform.h && 
                   selected.x < platform.x + platform.w
                 ) {
                   selected.y = platform.y - platform.h;
                   return false;
-                } else if (
+                } else if ( (i >= 0) &&
                   selected.x + selected.w > newRectArr[i].x &&
                   selected.x < newRectArr[i].x + newRectArr[i].w &&
                   selected.y + selected.h > newRectArr[i].y &&
@@ -135,7 +135,7 @@
                   selected.x = newRectArr[i].x;
                   selected.y = newRectArr[i].y - newRectArr[i].w;
                   return true;
-                } else if (
+                } else if ( (i >= 0) &&
                   selected.x >= newRectArr[i].x - (newRectArr[i].w / 2) && 
                   selected.x <= newRectArr[i].x + newRectArr[i].w && 
                   selected.y + selected.h > newRectArr[i].y &&
@@ -144,7 +144,7 @@
                   selected.x = newRectArr[i].x + newRectArr[i].w;
                   selected.y = newRectArr[i].y;  
                   return true;           
-                } else if (
+                } else if ( (i >= 0) &&
                   selected.x >= newRectArr[i].x - newRectArr[i].w && 
                   selected.x <= newRectArr[i].x + newRectArr[i].w && 
                   selected.y + selected.h > newRectArr[i].y &&
@@ -179,7 +179,7 @@
 
         onmouseup = () => {
           for (let i = 0; i < rectArr.length; i++) {
-            /*if (rectArr[i].selected && selectedInrect(rectArr[i], selected)) {
+            /*if (rectArr[i].selected && selectedInrect(rectArr[i])) {
               rectArr[i].x = rectArr[i].initialPosition.x;
               rectArr[i].y = rectArr[i].initialPosition.y;
             }*/
@@ -204,7 +204,7 @@
               rectArr[i].y = cursor.y - rectArr[i].h / 2;
             }
 
-            if (selectedInrect(rectArr[i], selected)) {
+            if (selectedInrect(rectArr[i])) {
               selected.drawRed();
             }
           }
