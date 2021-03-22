@@ -27,6 +27,15 @@
         canv.width = (window.innerWidth / 100) * 95;
         canv.height = (window.innerHeight / 100) * 95;
 
+        function getRandomColor() {
+          var letters = "0123456789ABCDEF";
+          var color = "#";
+          for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+          }
+          return color;
+        }
+
         function Rect(x, y, w, h, key) {
           this.x = x;
           this.y = y;
@@ -35,9 +44,10 @@
           this.key = key;
           this.selected = false;
           this.initialPosition = {};
+          this.color = getRandomColor();
 
           this.draw = function () {
-            ctx.fillStyle = "#ccc";
+            ctx.fillStyle = this.color;
             ctx.fillRect(this.x, this.y, this.w, this.h);
           };
 
