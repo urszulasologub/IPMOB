@@ -90,7 +90,8 @@
                   selected.y + selected.h > newRectArr[i].y &&
                   selected.y < newRectArr[i].y + newRectArr[i].h
                 ) {
-                  newRectArr[i].drawRed();
+                  selected.x = newRectArr[i].x;
+                  selected.y = newRectArr[i].y - newRectArr[i].w;
                   return true;
                 }
               }
