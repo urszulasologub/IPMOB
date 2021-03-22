@@ -87,16 +87,35 @@
               for (let i = 0; i < newRectArr.length; i++) {
                 if (selected.y >= platform.y - platform.h) {
                   selected.y = platform.y - platform.h;
-                }else if (
+                } else if (
                   selected.x + selected.w > newRectArr[i].x &&
                   selected.x < newRectArr[i].x + newRectArr[i].w &&
                   selected.y + selected.h > newRectArr[i].y &&
-                  selected.y < newRectArr[i].y + newRectArr[i].h
+                  selected.y < newRectArr[i].y
                 ) {
                   selected.x = newRectArr[i].x;
                   selected.y = newRectArr[i].y - newRectArr[i].w;
                   return true;
+                } else if (
+                  selected.x >= newRectArr[i].x - (newRectArr[i].w / 2) && 
+                  selected.x <= newRectArr[i].x + newRectArr[i].w && 
+                  selected.y + selected.h > newRectArr[i].y &&
+                  selected.y < newRectArr[i].y + newRectArr[i].h
+                ) {
+                  selected.x = newRectArr[i].x + newRectArr[i].w;
+                  selected.y = newRectArr[i].y;  
+                  return true;           
+                } else if (
+                  selected.x >= newRectArr[i].x - newRectArr[i].w && 
+                  selected.x <= newRectArr[i].x + newRectArr[i].w && 
+                  selected.y + selected.h > newRectArr[i].y &&
+                  selected.y < newRectArr[i].y + newRectArr[i].h
+                ) {
+                  selected.x = newRectArr[i].x - newRectArr[i].w;
+                  selected.y = newRectArr[i].y;  
+                  return true;           
                 }
+              
               }
             }
           }
@@ -121,8 +140,8 @@
         onmouseup = () => {
           for (let i = 0; i < rectArr.length; i++) {
             if (rectArr[i].selected && selectedInrect(rectArr[i])) {
-              rectArr[i].x = rectArr[i].initialPosition.x;
-              rectArr[i].y = rectArr[i].initialPosition.y;
+              //rectArr[i].x = rectArr[i].initialPosition.x;
+              //rectArr[i].y = rectArr[i].initialPosition.y;
             }
 
             if (rectArr[i].selected) rectArr[i].selected = !rectArr[i].selected;
