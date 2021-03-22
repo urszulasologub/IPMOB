@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://unpkg.com/konva@7.2.5/konva.min.js"></script>
     <meta charset="utf-8" />
     <title>Lab3</title>
     <style>
@@ -16,55 +15,45 @@
   </head>
   <body>
     <div id="container"></div>
-    <script>
-      function getRandomColor() {
-        var letters = '0123456789ABCDEF';
-        var color = '#';
-        for (var i = 0; i < 6; i++) {
-          color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
-      }
-
-      function spawnBox(stage, layer) {
-        var rectX = stage.width() / 2 - 50;
-        var rectY = stage.height() / 2 - 25;
-        var color = getRandomColor();
-        var box = new Konva.Rect({
-          x: rectX,
-          y: rectY,
-          width: 50,
-          height: 50,
-          fill: color,
-          stroke: 'black',
-          strokeWidth: 4,
-          draggable: true,
-        });
-        layer.add(box);
-        box.on('mouseover', function () {
-          document.body.style.cursor = 'pointer';
-        });
-        box.on('mouseout', function () {
-          document.body.style.cursor = 'default';
-        });
-        return box;
-      }
-
-      var width = window.innerWidth;
-      var height = window.innerHeight;
-
-      var stage = new Konva.Stage({
-        container: 'container',
-        width: width,
-        height: height,
-      });
-
-      var layer = new Konva.Layer();
-      spawnBox(stage, layer);
-      spawnBox(stage, layer);
-
-      
-      stage.add(layer);
-    </script>
+    <canvas></canvas>
   </body>
+  <script>
+    function getRandomColor() {
+      var letters = '0123456789ABCDEF';
+      var color = '#';
+      for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+
+    function spawnBox(width, height, boxes) {
+      boxes.push({
+        w: width, 
+        h: height,
+        color: getRandomColor(),
+        x: 0,
+        y: 0,
+      });
+    }
+
+    function drawBoxes(ctx, boxes) {
+      for(i = 0; i < boxes.length; ++i) {
+        ctx.fillStyle = boxes[i].color;
+        ctx.fillRect(boxes[i].x, boxes[i].y, boxes[i].w, boxes[i].h);
+      }
+    }
+
+    const canvas = document.querySelector('canvas');
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const ctx = canvas.getContext('2d');
+    var boxes = [];
+
+    spawnBox(50, 50, boxes);
+    drawBoxes(ctx, boxes);
+
+
+
+  </script>
 </html>
