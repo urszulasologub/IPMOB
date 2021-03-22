@@ -26,7 +26,17 @@
         const ctx = canv.getContext("2d");
         canv.width = (window.innerWidth / 100) * 95;
         canv.height = (window.innerHeight / 100) * 95;
-        let platform = new Rect(0, canv.height * 0.9, canv.width, 50);
+
+        canvas.addEventListener('click', function(event) {
+          var x = event.pageX - (innerWidth / 100) * 2.5,
+              y = event.pageY - (innerHeight / 100) * 2.5;
+          if (
+            x > button.x && x < button.x + button.w && 
+            y > button.y && y < button.y + button.h
+          ) {
+            console.log('ok');
+          }
+        }, false);
 
         function getRandomColor() {
           var letters = "0123456789ABCDEF";
@@ -59,10 +69,13 @@
         }
 
         let rectArr = [];
+        let platform = new Rect(0, canv.height * 0.9, canv.width * 0.8, 50);
+        let button = new Rect(canv.width * 0.8, canv.height * 0.1, canv.width * 0.2, canv.height * 0.1);
+        let current_key = 0;
 
         for (let i = 0; i < 6; i++) {
           rectArr.push(new Rect(50, 50 + i * 70, 50, 50));
-          rectArr[i].key = i;
+          rectArr[i].key = current_key++;
         }
 
         let cursor = {
@@ -85,7 +98,10 @@
               selected = rectArr[i];
               let newRectArr = rectArr.filter((item) => !item.selected);
               for (let i = 0; i < newRectArr.length; i++) {
-                if (selected.y > platform.y - platform.h) {
+                if (
+                  selected.y > platform.y - platform.h && 
+                  selected.x < platform.x + platform.w
+                ) {
                   selected.y = platform.y - platform.h;
                 } else if (
                   selected.x + selected.w > newRectArr[i].x &&
@@ -151,6 +167,11 @@
         setInterval(function () {
           ctx.clearRect(0, 0, canv.width, canv.height);
           platform.draw();
+          button.draw();
+          ctx.font = "30px Comic Sans MS";
+          ctx.fillStyle = "red";
+          ctx.textAlign = "center";
+          ctx.fillText("Spawn", button.x + (canv.width * 0.1), button.y + (canv.height * 0.06));
           for (let i = 0; i < rectArr.length; i++) {
             rectArr[i].draw();
 
