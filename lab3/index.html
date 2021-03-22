@@ -18,6 +18,14 @@
     <canvas></canvas>
   </body>
   <script>
+    /// initialization
+    const canvas = document.querySelector('canvas');
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const ctx = canvas.getContext('2d');
+    var boxes = [];
+    ///
+
     function getRandomColor() {
       var letters = '0123456789ABCDEF';
       var color = '#';
@@ -38,22 +46,69 @@
     }
 
     function drawBoxes(ctx, boxes) {
-      for(i = 0; i < boxes.length; ++i) {
+      for(let i = 0; i < boxes.length; ++i) {
         ctx.fillStyle = boxes[i].color;
         ctx.fillRect(boxes[i].x, boxes[i].y, boxes[i].w, boxes[i].h);
       }
     }
 
-    const canvas = document.querySelector('canvas');
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    const ctx = canvas.getContext('2d');
-    var boxes = [];
+    function mouseDown(e) {
+    	var bRect = canvas.getBoundingClientRect();
+    	mouseX = (e.clientX - bRect.left);
+    	mouseY = (e.clientY - bRect.top);
+    	for (let i = 0; i < boxes.length; i++) {
+    		if (inCircle(boxes[i], mouseX, mouseY)) {
+    			drag = true;
+    			dragHoldX = mouseX - boxes[i].x;
+    			dragHoldY = mouseY - boxes[i].y;
+    			dragIndex = i;
+    		}
+    	}
+    	if (drag) {
+    		window.addEventListener("mousemove", mouseMove, false);
+    	}
+    	canvas.removeEventListener("mousedown", mouseDown, false);
+    	window.addEventListener("mouseup", mouseUp, false);
+    	return false;		
+    }
 
+    function mouseMove(e) {
+    	var posX, posY;
+     
+    	var bRect = canvas.getBoundingClientRect();
+    	mouseX = (e.clientX - bRect.left);
+    	mouseY = (e.clientY - bRect.top);
+    	
+    	posX = mouseX - dragHoldX;
+    	posY = mouseY - dragHoldY;
+    	
+    	boxes[dragIndex].x = posX;
+    	boxes[dragIndex].y = posY;
+    	
+    	ctx.clearRect(0,0,canvas.width, canvas.height);
+    	drawPlatform();
+    	drawBoxes();
+    }
+
+    function mouseUp() {
+    	canvas.addEventListener("mousedown", mouseDown, false);
+    	window.removeEventListener("mouseup", mouseUp, false);
+    	if (drag) {
+    		drag = false;
+    		window.removeEventListener("mousemove", mouseMove, false);
+    	}
+    }
+    canvas.addEventListener("mousedown", mouseDown, false);
+
+    function inCircle(box, mx ,my) {
+      var imageData = ctx.getImageData(mx, my, 1, 1), index = (mx + my * imageData.width) * 4;
+      return (imageData.data[3] > 0 && box.color=="rgb(" + imageData.data[0] + "," + imageData.data[1] + "," + imageData.data[2] +")");
+    }
+
+    /// calls
     spawnBox(50, 50, boxes);
     drawBoxes(ctx, boxes);
-
-
-
+    canvas.addEventListener("mousedown", mouseDown, false);
+    ///
   </script>
 </html>
