@@ -73,13 +73,11 @@ function init(){
   }
 
   document.getElementById('delButton').onclick = function(e){
-
-    var id_del = document.getElementById('idDelInput').value;
-
+    var id_del = parseInt(document.getElementById('idDelInput').value);
     var request = db.transaction(["clients"], "readwrite").objectStore("clients").delete(id_del);
 
     request.onsuccess = function(event){
-      console.log(id_del+" deleted");
+      window.alert(id_del+" deleted");
     }
 
     updatetable();
@@ -114,7 +112,7 @@ function init(){
 
 <body onload="init()">
   
-    <h1>IndexedDB Example</h1>
+    <h1>Clients Database</h1>
 
     <p>
         <fieldset id="addForm">
