@@ -19,7 +19,7 @@ function init(){
     db.onerror = function(event) {
       alert("Database error: " + event.target.errorCode);
     };
-
+    updatetable();
   };
 
   request.onupgradeneeded = function(event) {  
@@ -38,6 +38,11 @@ function init(){
     var bname = document.getElementById('nameInput').value;
     var bsurname = document.getElementById('surnameInput').value;
     var bemail = document.getElementById('emailInput').value;
+
+    if (!bname || !bsurname || !bemail) {
+      window.alert("Fill the form correctly!");
+      return;
+    }
 
     const book_item = {
       name: bname,
@@ -115,12 +120,11 @@ function init(){
         <fieldset id="addForm">
             <legend>Add item</legend>
             <label>Name</label>
-            <input id="nameInput">
+            <input id="nameInput" required>
             <label>surname</label>
-            <input id="surnameInput">
+            <input id="surnameInput" required>
             <label>email</label>
-            <input id="emailInput">
-            <label>id</label>
+            <input type="email" id="emailInput" required>
             <button id="addButton">Add</button>
         </fieldset>
     </p>
