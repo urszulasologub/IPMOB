@@ -75,11 +75,6 @@ function init(){
   document.getElementById('delButton').onclick = function(e){
     var id_del = parseInt(document.getElementById('idDelInput').value);
     var request = db.transaction(["clients"], "readwrite").objectStore("clients").delete(id_del);
-
-    request.onsuccess = function(event){
-      window.alert(id_del+" deleted");
-    }
-
     updatetable();
   }
 
