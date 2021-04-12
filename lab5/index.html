@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<html>
+   <head>
+    <meta http-equiv = "Content-Type" content = "text/html; charset = utf-8" />
+    <script type = "text/javascript">
+     //prefixes of implementation that we want to test
+     window.indexedDB = window.indexedDB || window.mozIndexedDB || 
+     window.webkitIndexedDB || window.msIndexedDB;
+     
+     //prefixes of window.IDB objects
+     window.IDBTransaction = window.IDBTransaction || 
+     window.webkitIDBTransaction || window.msIDBTransaction;
+     window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || 
+     window.msIDBKeyRange
+     
+     if (!window.indexedDB) {
+      window.alert("Your browser doesn't support a stable version of IndexedDB.")
+     }
+     
+     const clientData = [
+      { name: "Jan", surname: "Kowalski", email: "jan@example.com" },
+      { name: "Paweł", surname: "Nowak", email: "pawel@example.com" }
+     ];
+     var db;
+     var request = window.indexedDB.open("newDatabase", 1);
+     
+     request.onerror = function(event) {
+      console.log("error: ");
+     };
+     
+     request.onsuccess = function(event) {
+      db = request.result;
+      console.log("success: "+ db);
+     };
+     
+     request.onupgradeneeded = function(event) {
+      var db = event.target.result;
+      var objectStore = db.createObjectStore("client", {keyPath: "id", autoIncrement: true});
+      
+      for (var i in clientData) {
+         objectStore.add(clientData[i]);
+      }
+     }
+     
+     /*function read() {
+      var transaction = db.transaction(["client"]);
+      var objectStore = transaction.objectStore("client");
+      var request = objectStore.get("00-03");
+      
+      request.onerror = function(event) {
+         alert("Unable to retrieve daa from database!");
+      };
+      
+      request.onsuccess = function(event) {
+         // Do something with the request.result!
+         if(request.result) {
+          alert("Name: " + request.result.name + ", Age: " + request.result.age + ", Email: " + request.result.email);
+         } else {
+          alert("Kenny couldn't be found in your database!");
+         }
+      };
+     }*/
+     
+     function readAll() {
+      var objectStore = db.transaction("client").objectStore("client");
+      
+      objectStore.openCursor().onsuccess = function(event) {
+         var cursor = event.target.result;
+         
+         if (cursor) {
+          alert("id #" + cursor.key + ": " + cursor.value.name + ", " + cursor.value.surname + ", Email: " + cursor.value.email);
+          cursor.continue();
+         } else {
+          alert("No more entries!");
+         }
+      };
+     }
+     
+    function addClient(name, surname, email) {
+      var request = db.transaction(["client"], "readwrite")
+      .objectStore("client")
+      .add({name: name, surname: surname, email: email });
+      
+      request.onsuccess = function(event) {
+         alert("Client has been added to your database.");
+      };
+      
+      request.onerror = function(event) {
+         alert("Unable to add data\r\nClient already exists in your database! ");
+      }
+     }
+     
+     function remove(id) {
+      var request = db.transaction(["client"], "readwrite")
+      .objectStore("client")
+      .delete(id);
+      
+      request.onsuccess = function(event) {
+         alert("Client's entry has been removed from your database.");
+      };
+     }
+    </script>
+    
+   </head>
+   <body>
+    <button onclick = "readAll()">Read all </button>
+    <button onclick = "addClient('Test', 'Test2', 'test@example.com')">Add data </button>
+    <button onclick = "remove('3')">Delete data </button>
+   </body>
+</html>
