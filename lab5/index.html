@@ -33,7 +33,7 @@ function init(){
     };
   };
 
-  document.getElementById('addButton').onclick = function(e) {
+  document.getElementById('addClientForm').onsubmit = function(e) {
 
     var bname = document.getElementById('nameInput').value;
     var bsurname = document.getElementById('surnameInput').value;
@@ -98,8 +98,8 @@ function init(){
       cursor = event.target.result;
 
       if(cursor) {
-        document.getElementById("clients-table-body").innerHTML += "<tr><td>" + cursor.value.name + "</td><td>"
-          + cursor.value.surname + "</td><td>" + cursor.value.email + "</td><td>" + cursor.key + "</td></tr>";
+        document.getElementById("clients-table-body").innerHTML += "<tr><td>" + cursor.key + "</td><td>" + cursor.value.name + "</td><td>"
+          + cursor.value.surname + "</td><td>" + cursor.value.email + "</td></tr>";
 
           cursor.continue();
       }
@@ -115,16 +115,18 @@ function init(){
     <h1>Clients Database</h1>
 
     <p>
+      <form id="addClientForm">
         <fieldset id="addForm">
             <legend>Add item</legend>
             <label>Name</label>
             <input id="nameInput" required>
-            <label>surname</label>
+            <label>Surname</label>
             <input id="surnameInput" required>
-            <label>email</label>
+            <label>Email</label>
             <input type="email" id="emailInput" required>
-            <button id="addButton">Add</button>
+            <button type="submit" id="addButton">Add</button>
         </fieldset>
+      </form>
     </p>
 
     <p>
@@ -138,7 +140,7 @@ function init(){
 
     <table id="clients-table">
         <thead>
-            <tr><th>Name</th><th>surname</th><th>email</th><th>id</th></tr>
+          <tr><th>ID</th><th>Name</th><th>Surname</th><th>Email</th></tr>
         </thead>
         <tbody id="clients-table-body">
         </tbody>
