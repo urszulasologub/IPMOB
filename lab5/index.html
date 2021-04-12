@@ -1,111 +1,146 @@
 <!DOCTYPE html>
+<head>
+<script>
+  window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+  window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction || {READ_WRITE: "readwrite"}; // This line should only be needed if it is needed to support the object's constants for older browsers
+  window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
 
-<html>
-   <head>
-    <meta http-equiv = "Content-Type" content = "text/html; charset = utf-8" />
-    <script type = "text/javascript">
-     //prefixes of implementation that we want to test
-     window.indexedDB = window.indexedDB || window.mozIndexedDB || 
-     window.webkitIndexedDB || window.msIndexedDB;
-     
-     //prefixes of window.IDB objects
-     window.IDBTransaction = window.IDBTransaction || 
-     window.webkitIDBTransaction || window.msIDBTransaction;
-     window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || 
-     window.msIDBKeyRange
-     
-     if (!window.indexedDB) {
-      window.alert("Your browser doesn't support a stable version of IndexedDB.")
-     }
-     
-     const clientData = [
-      { name: "Jan", surname: "Kowalski", email: "jan@example.com" },
-      { name: "Paweł", surname: "Nowak", email: "pawel@example.com" }
-     ];
-     var db;
-     var request = window.indexedDB.open("newDatabase", 1);
-     
-     request.onerror = function(event) {
-      console.log("error: ");
-     };
-     
-     request.onsuccess = function(event) {
-      db = request.result;
-      console.log("success: "+ db);
-     };
-     
-     request.onupgradeneeded = function(event) {
-      var db = event.target.result;
-      var objectStore = db.createObjectStore("client", {keyPath: "id", autoIncrement: true});
+  if (!window.indexedDB) {
+    window.alert("Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.");
+  }
+
+function init(){
+  var request = window.indexedDB.open("ClientDatabase", 1);
+  request.onerror = function(event) {
+    alert("Error faced while opening database");
+  };
+  request.onsuccess = function(event) {
+    db = event.target.result;
+    db.onerror = function(event) {
+      alert("Database error: " + event.target.errorCode);
+    };
+
+  };
+
+  request.onupgradeneeded = function(event) {  
+    var db = event.target.result;
+    var objectStore = db.createObjectStore("clients", {keyPath: "id", autoIncrement: true});
+    objectStore.createIndex("name", "name", {unique:false});
+    objectStore.createIndex("surname", "surname", {unique:false});
+    objectStore.createIndex("email", "email", {unique:false});
+    objectStore.transaction.oncomplete = function(event) {
       
-      for (var i in clientData) {
-         objectStore.add(clientData[i]);
-      }
-     }
-     
-     /*function read() {
-      var transaction = db.transaction(["client"]);
-      var objectStore = transaction.objectStore("client");
-      var request = objectStore.get("00-03");
-      
-      request.onerror = function(event) {
-         alert("Unable to retrieve daa from database!");
-      };
-      
-      request.onsuccess = function(event) {
-         // Do something with the request.result!
-         if(request.result) {
-          alert("Name: " + request.result.name + ", Age: " + request.result.age + ", Email: " + request.result.email);
-         } else {
-          alert("Kenny couldn't be found in your database!");
-         }
-      };
-     }*/
-     
-     function readAll() {
-      var objectStore = db.transaction("client").objectStore("client");
-      
-      objectStore.openCursor().onsuccess = function(event) {
-         var cursor = event.target.result;
-         
-         if (cursor) {
-          alert("id #" + cursor.key + ": " + cursor.value.name + ", " + cursor.value.surname + ", Email: " + cursor.value.email);
+    };
+  };
+
+  document.getElementById('addButton').onclick = function(e) {
+
+    var bname = document.getElementById('nameInput').value;
+    var bsurname = document.getElementById('surnameInput').value;
+    var bemail = document.getElementById('emailInput').value;
+
+    const book_item = {
+      name: bname,
+      surname: bsurname,
+      email: bemail
+    }
+
+    var transaction = db.transaction(["clients"], "readwrite");
+
+    transaction.oncomplete = function(event) {
+      console.log("all done with transaction");
+    };
+
+    transaction.onerror = function(event){
+      console.dir(event);
+    };
+
+    var clientsObjectStore = transaction.objectStore("clients");
+
+    var request = clientsObjectStore.add(book_item);
+
+    request.onsuccess = function(event){
+      console.log("added item");
+    };
+
+    updatetable();
+
+  }
+
+  document.getElementById('delButton').onclick = function(e){
+
+    var id_del = document.getElementById('idDelInput').value;
+
+    var request = db.transaction(["clients"], "readwrite").objectStore("clients").delete(id_del);
+
+    request.onsuccess = function(event){
+      console.log(id_del+" deleted");
+    }
+
+    updatetable();
+  }
+
+  function updatetable(){
+
+    document.getElementById("clients-table-body").innerHTML = "";
+
+    var request = db.transaction("clients").objectStore("clients").openCursor();
+
+    request.onerror = function(event){
+      console.dir(event);
+    };
+
+    request.onsuccess = function(event){
+
+      cursor = event.target.result;
+
+      if(cursor) {
+        document.getElementById("clients-table-body").innerHTML += "<tr><td>" + cursor.value.name + "</td><td>"
+          + cursor.value.surname + "</td><td>" + cursor.value.email + "</td><td>" + cursor.key + "</td></tr>";
+
           cursor.continue();
-         } else {
-          alert("No more entries!");
-         }
-      };
-     }
-     
-    function addClient(name, surname, email) {
-      var request = db.transaction(["client"], "readwrite")
-      .objectStore("client")
-      .add({name: name, surname: surname, email: email });
-      
-      request.onsuccess = function(event) {
-         alert("Client has been added to your database.");
-      };
-      
-      request.onerror = function(event) {
-         alert("Unable to add data\r\nClient already exists in your database! ");
       }
-     }
-     
-     function remove(id) {
-      var request = db.transaction(["client"], "readwrite")
-      .objectStore("client")
-      .delete(id);
-      
-      request.onsuccess = function(event) {
-         alert("Client's entry has been removed from your database.");
-      };
-     }
-    </script>
-    
-   </head>
-   <body>
-    <button onclick = "readAll()">Read all </button>
-    <button onclick = "addClient('Test', 'Test2', 'test@example.com')">Add data </button>
-    <button onclick = "remove('3')">Delete data </button>
-   </body>
+    };
+  }
+}
+
+</script>
+</head>
+
+<body onload="init()">
+  
+    <h1>IndexedDB Example</h1>
+
+    <p>
+        <fieldset id="addForm">
+            <legend>Add item</legend>
+            <label>Name</label>
+            <input id="nameInput">
+            <label>surname</label>
+            <input id="surnameInput">
+            <label>email</label>
+            <input id="emailInput">
+            <label>id</label>
+            <button id="addButton">Add</button>
+        </fieldset>
+    </p>
+
+    <p>
+      <fieldset id="deleteForm">
+        <legend>Delete item</legend>
+        <label>id</label>
+        <input id="idDelInput">
+        <button id="delButton">Delete</button>
+      </fieldset>
+    </p>
+
+    <table id="clients-table">
+        <thead>
+            <tr><th>Name</th><th>surname</th><th>email</th><th>id</th></tr>
+        </thead>
+        <tbody id="clients-table-body">
+        </tbody>
+    </table>
+
+</body>
 </html>
