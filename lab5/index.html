@@ -49,7 +49,6 @@
   };
 
   document.getElementById('addClientForm').onsubmit = function(e) {
-
     var bname = document.getElementById('nameInput').value;
     var bsurname = document.getElementById('surnameInput').value;
     var bemail = document.getElementById('emailInput').value;
@@ -78,21 +77,15 @@
       id_card: bid_card,
       phone: bphone
     }
-
     var transaction = db.transaction(["clients"], "readwrite");
-
     transaction.oncomplete = function(event) {
       console.log("all done with transaction");
     };
-
     transaction.onerror = function(event){
       console.dir(event);
     };
-
     var clientsObjectStore = transaction.objectStore("clients");
-
     var request = clientsObjectStore.add(book_item);
-
     request.onsuccess = function(event){
       console.log("added item");
     };
@@ -107,18 +100,58 @@
     updatetable();
   }
 
-  function updatetable(){
-
+  document.getElementById('filterButton').onclick = function(e){
+    var filter = document.getElementById('filterInput').value;
+    if (!filter) {
+      filter = "";
+    }
+    
     document.getElementById("clients-table-body").innerHTML = "";
-
     var request = db.transaction("clients").objectStore("clients").openCursor();
-
     request.onerror = function(event){
       console.dir(event);
     };
-
     request.onsuccess = function(event){
+      cursor = event.target.result;
 
+      if(cursor) {
+        if 
+          ((cursor.value.name.includes(filter) || 
+          cursor.value.surname.includes(filter) || 
+          cursor.value.email.includes(filter) || 
+          cursor.value.address.includes(filter) || 
+          cursor.value.city.includes(filter) || 
+          cursor.value.postal.includes(filter) || 
+          cursor.value.nip.includes(filter) || 
+          cursor.value.company.includes(filter) || 
+          cursor.value.id_card.includes(filter) || 
+          cursor.value.phone.includes(filter)
+          )) {
+          document.getElementById("clients-table-body").innerHTML += "<tr><td>" + cursor.key + 
+            "</td><td>" + cursor.value.name 
+              + "</td><td>" + cursor.value.surname
+              + "</td><td>" + cursor.value.email
+              + "</td><td>" + cursor.value.address
+              + "</td><td>" + cursor.value.city 
+              + "</td><td>" + cursor.value.postal
+              + "</td><td>" + cursor.value.nip
+              + "</td><td>" + cursor.value.company 
+              + "</td><td>" + cursor.value.id_card
+              + "</td><td>" + cursor.value.phone
+              + "</td></tr>";
+            cursor.continue();
+        }
+      }
+    };
+  }
+
+  function updatetable(){
+    document.getElementById("clients-table-body").innerHTML = "";
+    var request = db.transaction("clients").objectStore("clients").openCursor();
+    request.onerror = function(event){
+      console.dir(event);
+    };
+    request.onsuccess = function(event){
       cursor = event.target.result;
 
       if(cursor) {
@@ -175,7 +208,7 @@
           <input type="text" id="nipInput" name="nip_number" placeholder="123-456-32-18" pattern="((\d{3}[- ]\d{3}[- ]\d{2}[- ]\d{2})|(\d{3}[- ]\d{2}[- ]\d{2}[- ]\d{3}))" title="Polish NIP format"><br><br>
     
           <label for="companyName">Company name </label>
-          <input id="companyInput" placeholer="kis" required><br><br>
+          <input id="companyInput" placeholer="kis"><br><br>
 
           <label for="idCard">ID card number </label>
           <input type="text" id="idCardInput" name="id_card" placeholder="ABC123456" pattern="[A-Z]{3}[0-9]{6}" title="Correct ID card number contains 3 numbers and 6 digits"><br><br>
@@ -193,6 +226,15 @@
         <label>id</label>
         <input id="idDelInput">
         <button id="delButton">Delete</button>
+      </fieldset>
+    </p>
+
+    <p>
+      <fieldset id="searchForm">
+        <legend>Search</legend>
+        <label>Keyword</label>
+        <input id="filterInput">
+        <button id="filterButton">Filter</button>
       </fieldset>
     </p>
 
