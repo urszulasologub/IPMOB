@@ -137,12 +137,13 @@
               + "</td><td>" + cursor.value.phone
               + "</td><td><button id=\"delButton\" value=\"" + cursor.key + "\">X</button>"
               + "</td></tr>";
-        }
-        document.getElementById('delButton').onclick = function(e){
-          var id_del = parseInt(document.getElementById('delButton').value);
-          var request = db.transaction(["clients"], "readwrite").objectStore("clients").delete(id_del);
-          updatetable();
-        }
+              document.getElementById('delButton').onclick = function(e){
+                var id_del = parseInt(document.getElementById('delButton').value);
+                var request = db.transaction(["clients"], "readwrite").objectStore("clients").delete(id_del);
+                document.getElementById('filterInput').value = "";
+                updatetable();
+              }
+          }
         cursor.continue();
       }
     };
@@ -171,12 +172,12 @@
             + "</td><td>" + cursor.value.phone
             + "</td><td><button id=\"delButton\" value=\"" + cursor.key + "\">X</button>"
             + "</td></tr>";
-
             document.getElementById('delButton').onclick = function(e){
               var id_del = parseInt(document.getElementById('delButton').value);
               var request = db.transaction(["clients"], "readwrite").objectStore("clients").delete(id_del);
+              document.getElementById('filterInput').value = "";
               updatetable();
-            }
+           }
           }
           cursor.continue();
       }
