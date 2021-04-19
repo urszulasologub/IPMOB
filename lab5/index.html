@@ -33,9 +33,16 @@
   request.onupgradeneeded = function(event) {  
     var db = event.target.result;
     var objectStore = db.createObjectStore("clients", {keyPath: "id", autoIncrement: true});
-    objectStore.createIndex("name", "name", {unique:false});
-    objectStore.createIndex("surname", "surname", {unique:false});
-    objectStore.createIndex("email", "email", {unique:false});
+    objectStore.createIndex("name", "name", {unique: false});
+    objectStore.createIndex("surname", "surname", {unique: false});
+    objectStore.createIndex("email", "email", {unique: false});
+    objectStore.createIndex("address", "address", {unique: false});
+    objectStore.createIndex("city", "city", {unique: false});
+    objectStore.createIndex("postal", "postal", {unique: false});
+    objectStore.createIndex("nip", "nip", {unique: false});
+    objectStore.createIndex("company", "company", {unique: false});
+    objectStore.createIndex("id_card", "id_card", {unique: false});
+    objectStore.createIndex("phone", "phone", {unique: false});
     objectStore.transaction.oncomplete = function(event) {
       
     };
@@ -46,7 +53,6 @@
     var bname = document.getElementById('nameInput').value;
     var bsurname = document.getElementById('surnameInput').value;
     var bemail = document.getElementById('emailInput').value;
-
     if (!bname || !bsurname || !bemail) {
       window.alert("Fill the form correctly!");
       return;
@@ -132,25 +138,25 @@
             <input required id="emailInput" type="email" id="email" name="email" placeholder="jareczek@example.com"><br><br>
             
             <label for="address">Address *</label>
-            <input required type="text" id="address" placeholder="ul. Żeromskiego 12a/33"><br><br>
+            <input required type="text" id="addressInput" placeholder="ul. Żeromskiego 12a/33"><br><br>
 
             <label>City *</label>
             <input id="cityInput" placeholder="Łódź" required><br><br>            
 
             <label for="postalCode">Zip Code *</label>
-            <input required type="text" id="postal_code" name="postal_code" placeholder="92-701" pattern="\d{2}-\d{3}" title="Format: (NN-NNN)"><br><br>
+            <input required type="text" id="postalInput" name="postal_code" placeholder="92-701" pattern="\d{2}-\d{3}" title="Format: (NN-NNN)"><br><br>
             
             <label for="nipNumber">NIP number </label>
-            <input type="text" id="nip_number" name="nip_number" placeholder="123-456-32-18" pattern="((\d{3}[- ]\d{3}[- ]\d{2}[- ]\d{2})|(\d{3}[- ]\d{2}[- ]\d{2}[- ]\d{3}))" title="Polish NIP format"><br><br>
+            <input type="text" id="nipInput" name="nip_number" placeholder="123-456-32-18" pattern="((\d{3}[- ]\d{3}[- ]\d{2}[- ]\d{2})|(\d{3}[- ]\d{2}[- ]\d{2}[- ]\d{3}))" title="Polish NIP format"><br><br>
       
             <label for="companyName">Company name </label>
             <input id="companyNameInput" placeholer="kis" required><br><br>
 
             <label for="idCard">ID card number </label>
-            <input type="text" id="id_card" name="id_card" placeholder="ABC123456" pattern="[A-Z]{3}[0-9]{6}" title="Correct ID card number contains 3 numbers and 6 digits"><br><br>
+            <input type="text" id="idCardInput" name="id_card" placeholder="ABC123456" pattern="[A-Z]{3}[0-9]{6}" title="Correct ID card number contains 3 numbers and 6 digits"><br><br>
 
             <label for="phoneNumber">Phone number *</label>
-            <input required type="text" id="phone_number" placeholder="123-123-123" name="phone_number" pattern="[0-9]{3}(-)?[0-9]{3}(-)?[0-9]{3}" title="NNN-NNN-NNN or NNNNNNNNN format"><br><br>
+            <input required type="text" id="phoneInput" placeholder="123-123-123" name="phone_number" pattern="[0-9]{3}(-)?[0-9]{3}(-)?[0-9]{3}" title="NNN-NNN-NNN or NNNNNNNNN format"><br><br>
         </fieldset>
       </form>
     </p>
