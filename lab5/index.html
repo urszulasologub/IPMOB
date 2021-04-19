@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <head>
+  <title>form</title>
   <style>
     input:invalid {
       border-color: rgb(197, 3, 3);
@@ -105,6 +106,7 @@
     if (!filter) {
       filter = "";
     }
+    filter = filter.toLowerCase();
     
     document.getElementById("clients-table-body").innerHTML = "";
     var request = db.transaction("clients").objectStore("clients").openCursor();
@@ -116,16 +118,17 @@
 
       if(cursor) {
         if 
-          ((cursor.value.name.includes(filter) || 
-          cursor.value.surname.includes(filter) || 
-          cursor.value.email.includes(filter) || 
-          cursor.value.address.includes(filter) || 
-          cursor.value.city.includes(filter) || 
-          cursor.value.postal.includes(filter) || 
-          cursor.value.nip.includes(filter) || 
-          cursor.value.company.includes(filter) || 
-          cursor.value.id_card.includes(filter) || 
-          cursor.value.phone.includes(filter)
+          ((cursor.key.toString().localeCompare(filter) == 0 ||
+          cursor.value.name.toLowerCase().includes(filter) || 
+          cursor.value.surname.toLowerCase().includes(filter) || 
+          cursor.value.email.toLowerCase().includes(filter) || 
+          cursor.value.address.toLowerCase().includes(filter) || 
+          cursor.value.city.toLowerCase().includes(filter) || 
+          cursor.value.postal.toLowerCase().includes(filter) || 
+          cursor.value.nip.toLowerCase().includes(filter) || 
+          cursor.value.company.toLowerCase().includes(filter) || 
+          cursor.value.id_card.toLowerCase().includes(filter) || 
+          cursor.value.phone.toLowerCase().includes(filter)
           )) {
           document.getElementById("clients-table-body").innerHTML += "<tr><td>" + cursor.key + 
             "</td><td>" + cursor.value.name 
