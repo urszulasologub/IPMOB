@@ -1,5 +1,13 @@
 <!DOCTYPE html>
 <head>
+  <style>
+    input:invalid {
+      border-color: rgb(197, 3, 3);
+    }
+    input:valid {
+      border-color: rgb(36, 175, 36);
+    }
+  </style>
 <script>
   window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
   window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction || {READ_WRITE: "readwrite"}; // This line should only be needed if it is needed to support the object's constants for older browsers
@@ -9,17 +17,17 @@
     window.alert("Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.");
   }
 
-function init(){
-  var request = window.indexedDB.open("ClientDatabase", 1);
-  request.onerror = function(event) {
-    alert("Error faced while opening database");
-  };
-  request.onsuccess = function(event) {
-    db = event.target.result;
-    db.onerror = function(event) {
-      alert("Database error: " + event.target.errorCode);
+  function init(){
+    var request = window.indexedDB.open("ClientDatabase", 1);
+    request.onerror = function(event) {
+      alert("Error faced while opening database");
     };
-    updatetable();
+    request.onsuccess = function(event) {
+      db = event.target.result;
+      db.onerror = function(event) {
+        alert("Database error: " + event.target.errorCode);
+      };
+      updatetable();
   };
 
   request.onupgradeneeded = function(event) {  
@@ -113,13 +121,36 @@ function init(){
       <form id="addClientForm">
         <fieldset id="addForm">
             <legend>Add item</legend>
-            <label>Name</label>
-            <input id="nameInput" required>
-            <label>Surname</label>
-            <input id="surnameInput" required>
-            <label>Email</label>
-            <input type="email" id="emailInput" required>
-            <button type="submit" id="addButton">Add</button>
+
+            <label>Name *</label>
+            <input id="nameInput" placeholder="Jan" required><br><br>
+
+            <label>Surname *</label>
+            <input id="surnameInput" placeholder="Kowalski" required><br><br>
+            
+            <label for="email">Email *</label>
+            <input required id="emailInput" type="email" id="email" name="email" placeholder="jareczek@example.com"><br><br>
+            
+            <label for="address">Address *</label>
+            <input required type="text" id="address" placeholder="ul. Żeromskiego 12a/33"><br><br>
+
+            <label>City *</label>
+            <input id="cityInput" placeholder="Łódź" required><br><br>            
+
+            <label for="postalCode">Zip Code *</label>
+            <input required type="text" id="postal_code" name="postal_code" placeholder="92-701" pattern="\d{2}-\d{3}" title="Format: (NN-NNN)"><br><br>
+            
+            <label for="nipNumber">NIP number </label>
+            <input type="text" id="nip_number" name="nip_number" placeholder="123-456-32-18" pattern="((\d{3}[- ]\d{3}[- ]\d{2}[- ]\d{2})|(\d{3}[- ]\d{2}[- ]\d{2}[- ]\d{3}))" title="Polish NIP format"><br><br>
+      
+            <label for="companyName">Company name </label>
+            <input id="companyNameInput" placeholer="kis" required><br><br>
+
+            <label for="idCard">ID card number </label>
+            <input type="text" id="id_card" name="id_card" placeholder="ABC123456" pattern="[A-Z]{3}[0-9]{6}" title="Correct ID card number contains 3 numbers and 6 digits"><br><br>
+
+            <label for="phoneNumber">Phone number *</label>
+            <input required type="text" id="phone_number" placeholder="123-123-123" name="phone_number" pattern="[0-9]{3}(-)?[0-9]{3}(-)?[0-9]{3}" title="NNN-NNN-NNN or NNNNNNNNN format"><br><br>
         </fieldset>
       </form>
     </p>
@@ -135,7 +166,7 @@ function init(){
 
     <table id="clients-table">
         <thead>
-          <tr><th>ID</th><th>Name</th><th>Surname</th><th>Email</th></tr>
+          <tr><th>ID</th><th>Name</th><th>Surname</th><th>Email</th><th>Address</th><th>City</th><th>Zip Code</th><th>NIP</th><th>Company</th><th>ID Card</th><th>Phone number</th></tr>
         </thead>
         <tbody id="clients-table-body">
         </tbody>
