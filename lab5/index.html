@@ -53,7 +53,15 @@
     var bname = document.getElementById('nameInput').value;
     var bsurname = document.getElementById('surnameInput').value;
     var bemail = document.getElementById('emailInput').value;
-    if (!bname || !bsurname || !bemail) {
+    var baddress = document.getElementById('addressInput').value;
+    var bcity = document.getElementById('cityInput').value;
+    var bpostal = document.getElementById('postalInput').value;
+    var bnip = document.getElementById('nipInput').value;
+    var bcompany = document.getElementById('companyInput').value;
+    var bid_card = document.getElementById('idCardInput').value;
+    var bphone = document.getElementById('phoneInput').value;
+
+    if (!bname || !bsurname || !bemail || !baddress || !bcity || !bpostal || !bphone) {
       window.alert("Fill the form correctly!");
       return;
     }
@@ -61,7 +69,14 @@
     const book_item = {
       name: bname,
       surname: bsurname,
-      email: bemail
+      email: bemail,
+      address: baddress, 
+      city: bcity, 
+      postal: bpostal,
+      nip: bnip,
+      company: bcompany,
+      id_card: bid_card,
+      phone: bphone
     }
 
     var transaction = db.transaction(["clients"], "readwrite");
@@ -126,37 +141,38 @@
     <p>
       <form id="addClientForm">
         <fieldset id="addForm">
-            <legend>Add item</legend>
+          <legend>Add item</legend>
 
-            <label>Name *</label>
-            <input id="nameInput" placeholder="Jan" required><br><br>
+          <label>Name *</label>
+          <input id="nameInput" placeholder="Jan" required><br><br>
 
-            <label>Surname *</label>
-            <input id="surnameInput" placeholder="Kowalski" required><br><br>
-            
-            <label for="email">Email *</label>
-            <input required id="emailInput" type="email" id="email" name="email" placeholder="jareczek@example.com"><br><br>
-            
-            <label for="address">Address *</label>
-            <input required type="text" id="addressInput" placeholder="ul. Żeromskiego 12a/33"><br><br>
+          <label>Surname *</label>
+          <input id="surnameInput" placeholder="Kowalski" required><br><br>
+          
+          <label for="email">Email *</label>
+          <input required id="emailInput" type="email" id="email" name="email" placeholder="jareczek@example.com"><br><br>
+          
+          <label for="address">Address *</label>
+          <input required type="text" id="addressInput" placeholder="ul. Żeromskiego 12a/33"><br><br>
 
-            <label>City *</label>
-            <input id="cityInput" placeholder="Łódź" required><br><br>            
+          <label>City *</label>
+          <input id="cityInput" placeholder="Łódź" required><br><br>            
 
-            <label for="postalCode">Zip Code *</label>
-            <input required type="text" id="postalInput" name="postal_code" placeholder="92-701" pattern="\d{2}-\d{3}" title="Format: (NN-NNN)"><br><br>
-            
-            <label for="nipNumber">NIP number </label>
-            <input type="text" id="nipInput" name="nip_number" placeholder="123-456-32-18" pattern="((\d{3}[- ]\d{3}[- ]\d{2}[- ]\d{2})|(\d{3}[- ]\d{2}[- ]\d{2}[- ]\d{3}))" title="Polish NIP format"><br><br>
-      
-            <label for="companyName">Company name </label>
-            <input id="companyNameInput" placeholer="kis" required><br><br>
+          <label for="postalCode">Zip Code *</label>
+          <input required type="text" id="postalInput" name="postal_code" placeholder="92-701" pattern="\d{2}-\d{3}" title="Format: (NN-NNN)"><br><br>
+          
+          <label for="nipNumber">NIP number </label>
+          <input type="text" id="nipInput" name="nip_number" placeholder="123-456-32-18" pattern="((\d{3}[- ]\d{3}[- ]\d{2}[- ]\d{2})|(\d{3}[- ]\d{2}[- ]\d{2}[- ]\d{3}))" title="Polish NIP format"><br><br>
+    
+          <label for="companyName">Company name </label>
+          <input id="companyInput" placeholer="kis" required><br><br>
 
-            <label for="idCard">ID card number </label>
-            <input type="text" id="idCardInput" name="id_card" placeholder="ABC123456" pattern="[A-Z]{3}[0-9]{6}" title="Correct ID card number contains 3 numbers and 6 digits"><br><br>
+          <label for="idCard">ID card number </label>
+          <input type="text" id="idCardInput" name="id_card" placeholder="ABC123456" pattern="[A-Z]{3}[0-9]{6}" title="Correct ID card number contains 3 numbers and 6 digits"><br><br>
 
-            <label for="phoneNumber">Phone number *</label>
-            <input required type="text" id="phoneInput" placeholder="123-123-123" name="phone_number" pattern="[0-9]{3}(-)?[0-9]{3}(-)?[0-9]{3}" title="NNN-NNN-NNN or NNNNNNNNN format"><br><br>
+          <label for="phoneNumber">Phone number *</label>
+          <input required type="text" id="phoneInput" placeholder="123-123-123" name="phone_number" pattern="[0-9]{3}(-)?[0-9]{3}(-)?[0-9]{3}" title="NNN-NNN-NNN or NNNNNNNNN format"><br><br>
+          <button type="submit" id="addButton">Add</button>
         </fieldset>
       </form>
     </p>
