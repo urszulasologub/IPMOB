@@ -95,12 +95,6 @@
 
   }
 
-  document.getElementById('delButton').onclick = function(e){
-    var id_del = parseInt(document.getElementById('idDelInput').value);
-    var request = db.transaction(["clients"], "readwrite").objectStore("clients").delete(id_del);
-    updatetable();
-  }
-
   document.getElementById('filterButton').onclick = function(e){
     var filter = document.getElementById('filterInput').value;
     if (!filter) {
@@ -129,7 +123,7 @@
           cursor.value.company.toLowerCase().includes(filter) || 
           cursor.value.id_card.toLowerCase().includes(filter) || 
           cursor.value.phone.toLowerCase().includes(filter)
-          )) {
+        )) {
           document.getElementById("clients-table-body").innerHTML += "<tr><td>" + cursor.key + 
             "</td><td>" + cursor.value.name 
               + "</td><td>" + cursor.value.surname
@@ -141,9 +135,15 @@
               + "</td><td>" + cursor.value.company 
               + "</td><td>" + cursor.value.id_card
               + "</td><td>" + cursor.value.phone
+              + "</td><td><button id=\"delButton\" value=\"" + cursor.key + "\">X</button>"
               + "</td></tr>";
-            cursor.continue();
         }
+        document.getElementById('delButton').onclick = function(e){
+          var id_del = parseInt(document.getElementById('delButton').value);
+          var request = db.transaction(["clients"], "readwrite").objectStore("clients").delete(id_del);
+          updatetable();
+        }
+        cursor.continue();
       }
     };
   }
@@ -157,7 +157,7 @@
     request.onsuccess = function(event){
       cursor = event.target.result;
 
-      if(cursor) {
+      if (cursor) {
         document.getElementById("clients-table-body").innerHTML += "<tr><td>" + cursor.key + 
           "</td><td>" + cursor.value.name 
             + "</td><td>" + cursor.value.surname
@@ -169,13 +169,19 @@
             + "</td><td>" + cursor.value.company 
             + "</td><td>" + cursor.value.id_card
             + "</td><td>" + cursor.value.phone
+            + "</td><td><button id=\"delButton\" value=\"" + cursor.key + "\">X</button>"
             + "</td></tr>";
 
+            document.getElementById('delButton').onclick = function(e){
+              var id_del = parseInt(document.getElementById('delButton').value);
+              var request = db.transaction(["clients"], "readwrite").objectStore("clients").delete(id_del);
+              updatetable();
+            }
+          }
           cursor.continue();
       }
     };
   }
-}
 
 </script>
 </head>
@@ -211,7 +217,7 @@
           <input type="text" id="nipInput" name="nip_number" placeholder="123-456-32-18" pattern="((\d{3}[- ]\d{3}[- ]\d{2}[- ]\d{2})|(\d{3}[- ]\d{2}[- ]\d{2}[- ]\d{3}))" title="Polish NIP format"><br><br>
     
           <label for="companyName">Company name </label>
-          <input id="companyInput" placeholer="kis"><br><br>
+          <input id="companyInput" placeholder="kis"><br><br>
 
           <label for="idCard">ID card number </label>
           <input type="text" id="idCardInput" name="id_card" placeholder="ABC123456" pattern="[A-Z]{3}[0-9]{6}" title="Correct ID card number contains 3 numbers and 6 digits"><br><br>
@@ -221,15 +227,6 @@
           <button type="submit" id="addButton">Add</button>
         </fieldset>
       </form>
-    </p>
-
-    <p>
-      <fieldset id="deleteForm">
-        <legend>Delete item</legend>
-        <label>id</label>
-        <input id="idDelInput">
-        <button id="delButton">Delete</button>
-      </fieldset>
     </p>
 
     <p>
