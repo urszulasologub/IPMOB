@@ -122,8 +122,18 @@
       cursor = event.target.result;
 
       if(cursor) {
-        document.getElementById("clients-table-body").innerHTML += "<tr><td>" + cursor.key + "</td><td>" + cursor.value.name + "</td><td>"
-          + cursor.value.surname + "</td><td>" + cursor.value.email + "</td></tr>";
+        document.getElementById("clients-table-body").innerHTML += "<tr><td>" + cursor.key + 
+          "</td><td>" + cursor.value.name 
+            + "</td><td>" + cursor.value.surname
+            + "</td><td>" + cursor.value.email
+            + "</td><td>" + cursor.value.address
+            + "</td><td>" + cursor.value.city 
+            + "</td><td>" + cursor.value.postal
+            + "</td><td>" + cursor.value.nip
+            + "</td><td>" + cursor.value.company 
+            + "</td><td>" + cursor.value.id_card
+            + "</td><td>" + cursor.value.phone
+            + "</td></tr>";
 
           cursor.continue();
       }
