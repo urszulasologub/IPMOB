@@ -53,6 +53,7 @@
   };
 
   document.getElementById('addClientForm').onsubmit = function(e) {
+    var bid = document.getElementById('idInput').value;
     var bname = document.getElementById('nameInput').value;
     var bsurname = document.getElementById('surnameInput').value;
     var bemail = document.getElementById('emailInput').value;
@@ -69,33 +70,47 @@
       return;
     }
 
-    const book_item = {
-      name: bname,
-      surname: bsurname,
-      email: bemail,
-      address: baddress, 
-      city: bcity, 
-      postal: bpostal,
-      nip: bnip,
-      company: bcompany,
-      id_card: bid_card,
-      phone: bphone
+    if (bid) {
+      const book_item = {
+        id: bid,
+        name: bname,
+        surname: bsurname,
+        email: bemail,
+        address: baddress, 
+        city: bcity, 
+        postal: bpostal,
+        nip: bnip,
+        company: bcompany,
+        id_card: bid_card,
+        phone: bphone
+      }
+    } else {
+      const book_item = {
+        name: bname,
+        surname: bsurname,
+        email: bemail,
+        address: baddress, 
+        city: bcity, 
+        postal: bpostal,
+        nip: bnip,
+        company: bcompany,
+        id_card: bid_card,
+        phone: bphone
+      }
+      var transaction = db.transaction(["clients"], "readwrite");
+      transaction.oncomplete = function(event) {
+        console.log("all done with transaction");
+      };
+      transaction.onerror = function(event){
+        console.dir(event);
+      };
+      var clientsObjectStore = transaction.objectStore("clients");
+      var request = clientsObjectStore.add(book_item);
+      request.onsuccess = function(event){
+        console.log("added item");
+      };
     }
-    var transaction = db.transaction(["clients"], "readwrite");
-    transaction.oncomplete = function(event) {
-      console.log("all done with transaction");
-    };
-    transaction.onerror = function(event){
-      console.dir(event);
-    };
-    var clientsObjectStore = transaction.objectStore("clients");
-    var request = clientsObjectStore.add(book_item);
-    request.onsuccess = function(event){
-      console.log("added item");
-    };
-
     updatetable();
-
   }
 
   document.getElementById('filterButton').onclick = function(e){
