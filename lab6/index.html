@@ -155,10 +155,18 @@
     return randomElement;
   }
 
+  function generateRandomAddress() {
+    var street = ['ul. Wólczańska', 'ul. Racławicka', 'ul. Pabianicka', 'Aleja Politechniki', 'ul. Piotrkowska', 'ul. Narutowicza'];
+    var alphabet = "abcdefghijklmnopqrstuvwxyz"
+    var house = Math.floor(Math.random() * 99) + 1 + alphabet[Math.floor(Math.random() * alphabet.length)] + '/' + Math.floor(Math.random() * 9) + 1; 
+    return randomText(street) + " " + house.toString();
+  }
+
   document.getElementById('generateButton').onclick = function(e) {
     document.getElementById("nameInput").value = randomText(['Mariusz', 'Monika', 'Jan', 'Stefan', 'Ala', 'Ela', 'Ola', 'Ula', 'Marcin', 'Waldek', 'Piotr', 'Tomasz']);
     document.getElementById("surnameInput").value = randomText(['Pudzianowski', 'Najman', 'Paździoch', 'Kowalski', 'Nowak', 'Duch', 'Jaworski', 'Drzymała', 'Welfle']);
     document.getElementById("emailInput").value = Math.random().toString(36).substring(2, 5) + Math.random().toString(36).substring(2, 5) + '@gmail.com';
+    document.getElementById("addressInput").value = generateRandomAddress();
   }
 
   function updatetable(){
