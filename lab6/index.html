@@ -149,6 +149,17 @@
     };
   }
 
+  function randomText(textArray) {
+    var randomIndex = Math.floor(Math.random() * textArray.length); 
+    var randomElement = textArray[randomIndex];
+    return randomElement;
+  }
+
+  document.getElementById('generateButton').onclick = function(e) {
+    document.getElementById("nameInput").value = randomText(['Mariusz', 'Monika', 'Jan', 'Stefan', 'Ala', 'Ela', 'Ola', 'Ula', 'Marcin', 'Waldek', 'Piotr', 'Tomasz']);
+    document.getElementById("surnameInput").value = randomText(['Pudzianowski', 'Najman', 'Paździoch', 'Kowalski', 'Nowak', 'Duch', 'Jaworski', 'Drzymała', 'Welfle']);
+  }
+
   function updatetable(){
     document.getElementById("clients-table-body").innerHTML = "";
     var request = db.transaction("clients").objectStore("clients").openCursor();
@@ -228,6 +239,7 @@
           <button type="submit" id="addButton">Add</button>
         </fieldset>
       </form>
+      <button id="generateButton">Generate Random Button</button>
     </p>
 
     <p>
