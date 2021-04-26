@@ -10,6 +10,7 @@
     }
   </style>
 <script>
+  const alphabet = "abcdefghijklmnopqrstuvwxyz"
   window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
   window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction || {READ_WRITE: "readwrite"}; // This line should only be needed if it is needed to support the object's constants for older browsers
   window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
@@ -157,7 +158,6 @@
 
   function generateRandomAddress() {
     var street = ['ul. Wólczańska', 'ul. Racławicka', 'ul. Pabianicka', 'Aleja Politechniki', 'ul. Piotrkowska', 'ul. Narutowicza'];
-    var alphabet = "abcdefghijklmnopqrstuvwxyz"
     var house = Math.floor(Math.random() * 99) + 1 + alphabet[Math.floor(Math.random() * alphabet.length)] + '/' + Math.floor(Math.random() * 9) + 1; 
     return randomText(street) + " " + house.toString();
   }
@@ -167,6 +167,9 @@
     document.getElementById("surnameInput").value = randomText(['Pudzianowski', 'Najman', 'Paździoch', 'Kowalski', 'Nowak', 'Duch', 'Jaworski', 'Drzymała', 'Welfle']);
     document.getElementById("emailInput").value = Math.random().toString(36).substring(2, 5) + Math.random().toString(36).substring(2, 5) + '@gmail.com';
     document.getElementById("addressInput").value = generateRandomAddress();
+    document.getElementById("cityInput").value = randomText(['Łódź', 'Warszawa', 'Wrocław', 'Gdańsk', 'Pabianice', 'Gdynia', 'Poznań']);
+    document.getElementById("postalInput").value = (Math.floor(Math.random() * 89 + 10) + '-' + Math.floor(Math.random() * 899 + 100)).toString(); 
+    document.getElementById("companyInput").value = Math.random().toString(36).substring(2, 10);
   }
 
   function updatetable(){
