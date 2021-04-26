@@ -104,6 +104,7 @@
           var request = clientsObjectStore.add(book_item);
           request.onsuccess = function(event){
             console.log("added item");
+            updatetable();
           };
         } else {
           window.alert("Record with this ID doesn't exist");
