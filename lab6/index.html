@@ -75,31 +75,39 @@
       bid = parseInt(bid);
       var transaction = db.transaction(["clients"], "readwrite");
       transaction.objectStore("clients").get(bid).onsuccess = function(event) {
-        const book_item = {
-          id: bid,
-          name: bname,
-          surname: bsurname,
-          email: bemail,
-          address: baddress, 
-          city: bcity, 
-          postal: bpostal,
-          nip: bnip,
-          company: bcompany,
-          id_card: bid_card,
-          phone: bphone
+        var cursor = event.target.result;
+        if (cursor) {
+          const book_item = {
+            id: bid,
+            name: bname,
+            surname: bsurname,
+            email: bemail,
+            address: baddress, 
+            city: bcity, 
+            postal: bpostal,
+            nip: bnip,
+            company: bcompany,
+            id_card: bid_card,
+            phone: bphone
+          }
+          var id_del = bid;
+          var transaction = db.transaction(["clients"], "readwrite");
+          var request = transaction.objectStore("clients").delete(id_del);
+          var transaction = db.transaction(["clients"], "readwrite");
+          transaction.oncomplete = function(event) {
+            console.log("all done with transaction");
+          };
+          transaction.onerror = function(event){
+            console.dir(event);
+          };
+          var clientsObjectStore = transaction.objectStore("clients");
+          var request = clientsObjectStore.add(book_item);
+          request.onsuccess = function(event){
+            console.log("added item");
+          };
+        } else {
+          window.alert("Record with this ID doesn't exist");
         }
-        var id_del = bid;
-        var transaction = db.transaction(["clients"], "readwrite");
-        var request = transaction.objectStore("clients").delete(id_del);
-        var store = transaction.objectStore("clients");
-        var request = store.put(book_item);
-        request.onsuccess = function(e){
-          console.log("all done with transaction");
-          updatetable();
-        };
-        request.onerror = function(e){
-          console.log('Error adding: '+e);
-        };
       };
     } else {
       const book_item = {
@@ -250,6 +258,7 @@
 <body onload="init()">
   
     <h1>Clients Database</h1>
+    Please, reset you database in your browser, because database structure has changed since last laboratories
 
     <p>
       <form id="addClientForm">
