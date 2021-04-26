@@ -53,6 +53,7 @@
   };
 
   document.getElementById('addClientForm').onsubmit = function(e) {
+    e.preventDefault();
     var bid = document.getElementById('idInput').value;
     var bname = document.getElementById('nameInput').value;
     var bsurname = document.getElementById('surnameInput').value;
@@ -71,6 +72,7 @@
     }
 
     if (bid) {
+      bid = parseInt(bid);
       const book_item = {
         id: bid,
         name: bname,
@@ -84,6 +86,17 @@
         id_card: bid_card,
         phone: bphone
       }
+      var id_del = bid;
+      var transaction = db.transaction(["clients"], "readwrite");
+      var request = transaction.objectStore("clients").delete(id_del);
+      var store = transaction.objectStore("clients");
+      var request = store.put(book_item);
+      request.onsuccess = function(e){
+        console.log("all done with transaction");
+      };
+      request.onerror = function(e){
+        console.log('Error adding: '+e);
+      };
     } else {
       const book_item = {
         name: bname,
