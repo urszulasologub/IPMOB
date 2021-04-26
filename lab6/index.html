@@ -53,6 +53,7 @@
   };
 
   document.getElementById('addClientForm').onsubmit = function(e) {
+    e.preventDefault();
     var bid = document.getElementById('idInput').value;
     var bname = document.getElementById('nameInput').value;
     var bsurname = document.getElementById('surnameInput').value;
@@ -70,31 +71,35 @@
       return;
     }
 
-    if (bid) {
+    if (bid != "") {
       bid = parseInt(bid);
-      const book_item = {
-        id: bid,
-        name: bname,
-        surname: bsurname,
-        email: bemail,
-        address: baddress, 
-        city: bcity, 
-        postal: bpostal,
-        nip: bnip,
-        company: bcompany,
-        id_card: bid_card,
-        phone: bphone
-      }
-      var id_del = bid;
       var transaction = db.transaction(["clients"], "readwrite");
-      var request = transaction.objectStore("clients").delete(id_del);
-      var store = transaction.objectStore("clients");
-      var request = store.put(book_item);
-      request.onsuccess = function(e){
-        console.log("all done with transaction");
-      };
-      request.onerror = function(e){
-        console.log('Error adding: '+e);
+      transaction.objectStore("clients").get(bid).onsuccess = function(event) {
+        const book_item = {
+          id: bid,
+          name: bname,
+          surname: bsurname,
+          email: bemail,
+          address: baddress, 
+          city: bcity, 
+          postal: bpostal,
+          nip: bnip,
+          company: bcompany,
+          id_card: bid_card,
+          phone: bphone
+        }
+        var id_del = bid;
+        var transaction = db.transaction(["clients"], "readwrite");
+        var request = transaction.objectStore("clients").delete(id_del);
+        var store = transaction.objectStore("clients");
+        var request = store.put(book_item);
+        request.onsuccess = function(e){
+          console.log("all done with transaction");
+          updatetable();
+        };
+        request.onerror = function(e){
+          console.log('Error adding: '+e);
+        };
       };
     } else {
       const book_item = {
@@ -287,7 +292,7 @@
           <button type="submit" id="addButton">Add</button>
         </fieldset>
       </form>
-      <button id="generateButton">Generate Random Button</button>
+      <button id="generateButton">Generate Random Data</button>
     </p>
 
     <p>
