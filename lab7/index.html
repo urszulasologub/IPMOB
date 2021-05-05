@@ -244,7 +244,6 @@
     document.getElementById('TriggerWorker').addEventListener('click', (e) => {
         const worker = new Worker('worker.js');
 
-        var bid = document.getElementById('idInput').value;
         var bname = document.getElementById('nameInput').value;
         var bsurname = document.getElementById('surnameInput').value;
         var bemail = document.getElementById('emailInput').value;
@@ -256,7 +255,6 @@
         var bid_card = document.getElementById('idCardInput').value;
         var bphone = document.getElementById('phoneInput').value;
         const item = {
-          id: bid,
           name: bname,
           surname: bsurname,
           email: bemail,
@@ -267,8 +265,8 @@
           company: bcompany,
           id_card: bid_card,
           phone: bphone
-        }
-        worker.postMessage(JSON.stringify(item))
+        };
+        worker.postMessage(JSON.stringify(item));
     });
   }
 

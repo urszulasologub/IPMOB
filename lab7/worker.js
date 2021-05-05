@@ -1,3 +1,27 @@
 onmessage = function (e) {
-    console.log(JSON.parse(e.data));
+
+  function changeLetterSize(str) {
+    var s = '';
+    var i = 0;
+    while (i < str.length) {
+      var n = str.charAt(i);
+      if (n == n.toUpperCase()) {
+        n = n.toLowerCase();
+      } else {
+        n = n.toUpperCase();
+      }
+      i += 1;
+      s += n; 
+    }
+    return s;
+  }
+
+  var data = JSON.parse(e.data);
+  console.log(data);
+  Object.keys(data).forEach(function (key) { 
+    data[key] = changeLetterSize(data[key]);
+  })
+
+  console.log(JSON.stringify(data));
+  return JSON.stringify(data);
 };
