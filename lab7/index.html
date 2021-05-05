@@ -241,6 +241,7 @@
   }
 
   document.getElementById('TriggerWorker').onclick = function(event) {
+    console.log("clicked");
     document.getElementById('TriggerWorker').addEventListener('click', (e) => {
         const worker = new Worker('worker.js');
 
@@ -268,8 +269,8 @@
         };
         worker.postMessage(JSON.stringify(item));
         worker.onmessage = function(e) {
-          result.textContent = e.data;
           console.log('Message received from worker');
+          result = e.data;
           console.log(e);
         }
     });
