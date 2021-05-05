@@ -267,11 +267,13 @@
       phone: bphone
     };
     worker.postMessage(JSON.stringify(item));
-    worker.onmessage = function(e) {
-      console.log('Message received from worker');
-      result = e.data;
-      console.log(e);
-    }
+    worker.addEventListener('message', handleMessageFromWorker);
+  }
+
+  function handleMessageFromWorker(e) {
+    console.log('Message received from worker');
+    result = e.data;
+    console.log(e);
   }
 
   function updatetable(){
