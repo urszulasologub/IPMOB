@@ -272,9 +272,7 @@
 
   function handleMessageFromWorker(e) {
     console.log('Message received from worker!');
-    console.log(e.data);
     result = JSON.parse(e.data);
-    console.log(result);
     document.getElementById("nameInput").value = result['name'];
     document.getElementById("surnameInput").value = result['surname'];
     document.getElementById("emailInput").value = result['email'];
@@ -328,7 +326,8 @@
 <body onload="init()">
   
     <h1>Clients Database</h1>
-    Please, reset you database in your browser, because database structure has changed since last laboratories
+    Please, reset you database in your browser, because database structure has changed since last laboratories<br>
+    To use webworker, please, generate random data first or fill the form manually<br>
 
     <p>
       <form id="addClientForm">
