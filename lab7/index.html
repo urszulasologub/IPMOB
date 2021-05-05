@@ -272,7 +272,7 @@
 
   function handleMessageFromWorker(e) {
     console.log('Message received from worker');
-    result = JSON.parse(e.data);
+    result = JSON.parse(e.MessageEvent.data);
     console.log(result);
     document.getElementById("nameInput").value = result['name'];
     document.getElementById("surnameInput").value = result['surname'];
