@@ -242,38 +242,36 @@
 
   document.getElementById('TriggerWorker').onclick = function(event) {
     console.log("clicked");
-    document.getElementById('TriggerWorker').addEventListener('click', (e) => {
-        const worker = new Worker('worker.js');
+    const worker = new Worker('worker.js');
 
-        var bname = document.getElementById('nameInput').value;
-        var bsurname = document.getElementById('surnameInput').value;
-        var bemail = document.getElementById('emailInput').value;
-        var baddress = document.getElementById('addressInput').value;
-        var bcity = document.getElementById('cityInput').value;
-        var bpostal = document.getElementById('postalInput').value;
-        var bnip = document.getElementById('nipInput').value;
-        var bcompany = document.getElementById('companyInput').value;
-        var bid_card = document.getElementById('idCardInput').value;
-        var bphone = document.getElementById('phoneInput').value;
-        const item = {
-          name: bname,
-          surname: bsurname,
-          email: bemail,
-          address: baddress, 
-          city: bcity, 
-          postal: bpostal,
-          nip: bnip,
-          company: bcompany,
-          id_card: bid_card,
-          phone: bphone
-        };
-        worker.postMessage(JSON.stringify(item));
-        worker.onmessage = function(e) {
-          console.log('Message received from worker');
-          result = e.data;
-          console.log(e);
-        }
-    });
+    var bname = document.getElementById('nameInput').value;
+    var bsurname = document.getElementById('surnameInput').value;
+    var bemail = document.getElementById('emailInput').value;
+    var baddress = document.getElementById('addressInput').value;
+    var bcity = document.getElementById('cityInput').value;
+    var bpostal = document.getElementById('postalInput').value;
+    var bnip = document.getElementById('nipInput').value;
+    var bcompany = document.getElementById('companyInput').value;
+    var bid_card = document.getElementById('idCardInput').value;
+    var bphone = document.getElementById('phoneInput').value;
+    const item = {
+      name: bname,
+      surname: bsurname,
+      email: bemail,
+      address: baddress, 
+      city: bcity, 
+      postal: bpostal,
+      nip: bnip,
+      company: bcompany,
+      id_card: bid_card,
+      phone: bphone
+    };
+    worker.postMessage(JSON.stringify(item));
+    worker.onmessage = function(e) {
+      console.log('Message received from worker');
+      result = e.data;
+      console.log(e);
+    }
   }
 
   function updatetable(){
