@@ -21,6 +21,7 @@ onmessage = function (e) {
     data[key] = changeLetterSize(data[key]);
   })
 
+  console.log("TEST");
   console.log(JSON.stringify(data));
-  self.postMessage(self.postMessage);
+  self.postMessage(JSON.stringify(data));
 };
