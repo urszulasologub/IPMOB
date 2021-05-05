@@ -17,11 +17,9 @@ onmessage = function (e) {
   }
 
   var data = JSON.parse(e.data);
-  console.log(data);
   Object.keys(data).forEach(function (key) { 
     data[key] = changeLetterSize(data[key]);
   })
 
-  console.log(JSON.stringify(data));
   return JSON.stringify(data);
 };

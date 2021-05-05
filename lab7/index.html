@@ -267,6 +267,11 @@
           phone: bphone
         };
         worker.postMessage(JSON.stringify(item));
+        worker.onmessage = function(e) {
+          result.textContent = e.data;
+          console.log('Message received from worker');
+          console.log(e);
+        }
     });
   }
 
