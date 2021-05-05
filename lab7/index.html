@@ -242,10 +242,33 @@
 
   document.getElementById('TriggerWorker').onclick = function(event) {
     document.getElementById('TriggerWorker').addEventListener('click', (e) => {
-    getDbObjects().then((value) => {
         const worker = new Worker('worker.js');
-        worker.postMessage(JSON.stringify(value))
-      });
+
+        var bid = document.getElementById('idInput').value;
+        var bname = document.getElementById('nameInput').value;
+        var bsurname = document.getElementById('surnameInput').value;
+        var bemail = document.getElementById('emailInput').value;
+        var baddress = document.getElementById('addressInput').value;
+        var bcity = document.getElementById('cityInput').value;
+        var bpostal = document.getElementById('postalInput').value;
+        var bnip = document.getElementById('nipInput').value;
+        var bcompany = document.getElementById('companyInput').value;
+        var bid_card = document.getElementById('idCardInput').value;
+        var bphone = document.getElementById('phoneInput').value;
+        const item = {
+          id: bid,
+          name: bname,
+          surname: bsurname,
+          email: bemail,
+          address: baddress, 
+          city: bcity, 
+          postal: bpostal,
+          nip: bnip,
+          company: bcompany,
+          id_card: bid_card,
+          phone: bphone
+        }
+        worker.postMessage(JSON.stringify(item))
     });
   }
 
