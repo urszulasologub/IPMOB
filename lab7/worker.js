@@ -1,5 +1,4 @@
 onmessage = function (e) {
-  console.log("run");
 
   function changeLetterSize(str) {
     var s = '';
@@ -22,7 +21,5 @@ onmessage = function (e) {
     data[key] = changeLetterSize(data[key]);
   })
 
-  console.log("TEST");
-  console.log(JSON.stringify(data));
   self.postMessage(JSON.stringify(data));
 };

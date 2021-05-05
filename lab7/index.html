@@ -267,14 +267,23 @@
       phone: bphone
     }
     worker.postMessage(JSON.stringify(item));
-    console.log('sent');
     worker.addEventListener('message', handleMessageFromWorker);
   }
 
   function handleMessageFromWorker(e) {
     console.log('Message received from worker');
-    result = e.data;
-    console.log(e);
+    result = JSON.parse(e.data);
+    console.log(result);
+    document.getElementById("nameInput").value = result['name'];
+    document.getElementById("surnameInput").value = result['surname'];
+    document.getElementById("emailInput").value = result['email'];
+    document.getElementById("addressInput").value = result['address'];
+    document.getElementById("cityInput").value = result['city'];
+    document.getElementById("postalInput").value = result['postal'];
+    document.getElementById("companyInput").value = result['company'];
+    document.getElementById("phoneInput").value = result['phone'];
+    document.getElementById("nipInput").value = result['nip'];
+    document.getElementById("idCardInput").value = result['id_card'];
   }
 
   function updatetable(){
