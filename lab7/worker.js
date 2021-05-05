@@ -1,4 +1,5 @@
 onmessage = function (e) {
+  console.log("run");
 
   function changeLetterSize(str) {
     var s = '';

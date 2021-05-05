@@ -265,8 +265,9 @@
       company: bcompany,
       id_card: bid_card,
       phone: bphone
-    };
+    }
     worker.postMessage(JSON.stringify(item));
+    console.log('sent');
     worker.addEventListener('message', handleMessageFromWorker);
   }
 
