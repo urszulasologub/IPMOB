@@ -240,6 +240,11 @@
     return ret;
   }
 
+  document.getElementById('TriggerFilter').onclick = function(event) {
+	  console.log("Filter clicked!");
+    const worker = new Worker('filter_picker.js');
+  }
+
   document.getElementById('TriggerWorker').onclick = function(event) {
     const worker = new Worker('worker.js');
 
@@ -270,7 +275,6 @@
   }
 
   function handleMessageFromWorker(e) {
-    console.log('Message received from worker!');
     result = JSON.parse(e.data);
     document.getElementById("nameInput").value = result['name'];
     document.getElementById("surnameInput").value = result['surname'];
@@ -317,11 +321,6 @@
           cursor.continue();
       }
     };
-  }
-
-  document.getElementById('TriggerFilter').onclick = function(event) {
-	  console.log("Filter clicked!");
-    const worker = new Worker('filter_picker.js');
   }
 
 </script>
@@ -379,7 +378,7 @@
       </form>
       <button id="generateButton">Generate Random Data</button><br>
       <button id="TriggerWorker">Run Webworker</button><br>
-	  <button id="TriggerFilter">Run Filter Webworker</button>
+	    <button id="TriggerFilter">Run Filter Webworker</button>
     </p>
 
     <p>
