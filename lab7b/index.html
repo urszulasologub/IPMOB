@@ -299,9 +299,9 @@
   }
 
   function handleMessageFromFilterWorker(e) {
-    result = JSON.parse(e.data);
+    var result = JSON.parse(e.data);
     var image = document.getElementById('imageInput').value;
-    document.getElementById('image-div').style.setProperty('--filter', `rgb(${e.R}, ${e.G}, ${e.B})`);
+    document.getElementById('image-div').style.setProperty('--filter', `rgb(${result.R}, ${result.G}, ${result.B})`);
     document.getElementById('image-div').style.backgroundImage = `url('${image}')`;
   }
 
