@@ -8,6 +8,9 @@
     input:valid {
       border-color: rgb(36, 175, 36);
     }
+    div {
+      background-repeat: no-repeat;
+    }
   </style>
 <script>
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -309,8 +312,8 @@
     result = JSON.parse(e.data);
     console.log(result);
     var image = document.getElementById('imageInput').value;
-    document.getElementById('image-div').src = image;
-    document.getElementById('image-div-wrapper').style.setProperty('--filter', `rgba(${e.R}, ${e.G}, ${e.B}, 0.5)`);
+    document.getElementById('image-div').style.backgroundImage = `url('${image}')`;
+    document.getElementById('image-div').style.setProperty('--filter', `rgba(${e.R}, ${e.G}, ${e.B}, 0.5)`);
   }
 
   function updatetable(){
@@ -406,8 +409,8 @@
 	    <button id="TriggerFilter">Run Filter Webworker</button>
     </p>
 
-    <div id="image-div-wrapper">
-      <img id="image-div" src="https://placem.at/things?h=400&w=400&txt=placeholder" />
+    <div id="image-div" style="background-image: url('https://placem.at/things?h=400&w=400&txt=placeholder')">
+      <img width="400" height="400">
     </div>
 
     <p>
