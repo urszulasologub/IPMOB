@@ -1,17 +1,7 @@
 <!DOCTYPE html>
 <head>
   <title>form</title>
-  <style>
-    input:invalid {
-      border-color: rgb(197, 3, 3);
-    }
-    input:valid {
-      border-color: rgb(36, 175, 36);
-    }
-    div {
-      background-repeat: no-repeat;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 <script>
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
   const bigAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -311,8 +301,8 @@
   function handleMessageFromFilterWorker(e) {
     result = JSON.parse(e.data);
     var image = document.getElementById('imageInput').value;
+    document.getElementById('image-div').style.setProperty('--filter', `rgb(${e.R}, ${e.G}, ${e.B})`);
     document.getElementById('image-div').style.backgroundImage = `url('${image}')`;
-    document.getElementById('image-div').style.backgroundColor =  `rgba(${e.R}, ${e.G}, ${e.B}, 0.5)`;
   }
 
   function updatetable(){
@@ -408,8 +398,8 @@
 	    <button id="TriggerFilter">Run Filter Webworker</button>
     </p>
 
-    <div >
-      <img id="image-div" width="400" height="400" style="background-image: url('https://placem.at/things?h=400&w=400&txt=placeholder')">
+    <div id="image-div">
+      <img width="400" height="400">
     </div>
 
     <p>

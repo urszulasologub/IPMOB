@@ -1,0 +1,24 @@
+#image-div {
+    background-image: url("https://placem.at/things?h=400&w=400&txt=placeholder");
+	background-repeat: no-repeat;
+    --filter: #000000;
+}
+
+#image-div::after {
+    background-color: var(--filter);
+	background-repeat: no-repeat;
+    content: "";
+    opacity: 50%;
+}
+
+input:invalid {
+	border-color: rgb(197, 3, 3);
+}
+
+  input:valid {
+	border-color: rgb(36, 175, 36);
+}
+
+div {
+	background-repeat: no-repeat;
+}
