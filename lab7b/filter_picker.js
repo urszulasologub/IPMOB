@@ -1,26 +1,23 @@
 onmessage = function (e) {
-
-  function changeLetterSize(str) {
-    var s = '';
-    var i = 0;
-    while (i < str.length) {
-      var n = str.charAt(i);
-      if (n == n.toUpperCase()) {
-        n = n.toLowerCase();
-      } else {
-        n = n.toUpperCase();
-      }
-      i += 1;
-      s += n; 
+  function sumLetters(str) {
+    var sum = 0;
+    for (var i = 0; i < str.length; ++i) {
+      sum += str.charCodeAt(i);
     }
-    return s;
+    return sum;
   }
   
   var data = JSON.parse(e.data);
+  var sum = 0;
   Object.keys(data).forEach(function (key) { 
-    data[key] = changeLetterSize(data[key]);
+    sum += sumLetters(data[key]);
   })
-  
-  self.postMessage(JSON.stringify(data));
+  var r = sum % 255;
+  const new_data = {
+    R: r, 
+    G: 255 - (sum % 255),
+    B: (0.5 * r > 125) ? 99 : 199
+  }
+  self.postMessage(JSON.stringify(new_data));
 };
   
