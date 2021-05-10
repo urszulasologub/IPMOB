@@ -251,6 +251,7 @@
     var bcompany = document.getElementById('companyInput').value;
     var bid_card = document.getElementById('idCardInput').value;
     var bphone = document.getElementById('phoneInput').value;
+    var bimage = document.getElementById('imageInput').value;
     const item = {
       name: bname,
       surname: bsurname,
@@ -261,7 +262,8 @@
       nip: bnip,
       company: bcompany,
       id_card: bid_card,
-      phone: bphone
+      phone: bphone,
+      image: bimage
     }
     return item;
   }
@@ -269,8 +271,10 @@
   document.getElementById('TriggerFilter').onclick = function(event) {
 	  console.log("Filter clicked!");
     const worker = new Worker('filter_picker.js');
+
     const item = getFormContent();
     worker.postMessage(JSON.stringify(item));
+    worker.addEventListener('message', handleMessageFromFilterWorker);
   }
 
 
@@ -294,6 +298,12 @@
     document.getElementById("phoneInput").value = result['phone'];
     document.getElementById("nipInput").value = result['nip'];
     document.getElementById("idCardInput").value = result['id_card'];
+    document.getElementById("imageInput").value = result['image'];
+  }
+
+  function handleMessageFromFilterWorker(e) {
+    result = JSON.parse(e.data);
+    console.log(result);
   }
 
   function updatetable(){
