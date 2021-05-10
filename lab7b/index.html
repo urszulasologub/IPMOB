@@ -305,8 +305,9 @@
     result = JSON.parse(e.data);
     console.log(result);
     document.getElementById('image-div').style.setProperty('--filter', `rgb(${e.R}, ${e.G}, ${e.B})`);
-    var imageUrl = document.getElementById('imageInput');
-    document.getElementById('image-div').style.backgroundImage = `url(${imageUrl.value})`;
+    var image = document.getElementById('imageInput').value;
+    console.log(image);
+    document.getElementById('image-div').style.backgroundImage = `url(${image})`;
   }
 
   function updatetable(){
