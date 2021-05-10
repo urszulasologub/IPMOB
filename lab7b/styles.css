@@ -1,7 +1,6 @@
 #image-div {
     background-image: url("https://placem.at/things?h=400&w=400&txt=placeholder");
 	background-repeat: no-repeat;
-    --filter: #000000;
 }
 
 #image-div::after {
