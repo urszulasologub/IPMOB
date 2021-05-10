@@ -304,10 +304,9 @@
   function handleMessageFromFilterWorker(e) {
     result = JSON.parse(e.data);
     console.log(result);
-    document.getElementById('image-div').style.setProperty('--filter', `rgba(${e.R}, ${e.G}, ${e.B}, 0.5)`);
     var image = document.getElementById('imageInput').value;
-    console.log(image);
-    document.getElementById('image-div').style.backgroundImage = `url(${image})`;
+    document.getElementById('image-div').src = `url(${image})`;
+    document.getElementById('image-div').style.setProperty('--filter', `rgba(${e.R}, ${e.G}, ${e.B}, 0.5)`);
   }
 
   function updatetable(){
