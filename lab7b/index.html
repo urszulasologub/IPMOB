@@ -270,9 +270,12 @@
   }
 
   document.getElementById('TriggerFilter').onclick = function(event) {
-    const worker = new Worker('filter_picker.js');
-
+    if (document.getElementById("imageInput").value.length < 1) {
+      window.alert("Image cannot be blank!");
+      return;
+    }
     const item = getFormContent();
+    const worker = new Worker('filter_picker.js');
     worker.postMessage(JSON.stringify(item));
     worker.addEventListener('message', handleMessageFromFilterWorker);
   }
@@ -305,8 +308,9 @@
     result = JSON.parse(e.data);
     console.log(result);
     var image = document.getElementById('imageInput').value;
-    document.getElementById('image-div').src = `url(${image})`;
-    document.getElementById('image-div').style.setProperty('--filter', `rgba(${e.R}, ${e.G}, ${e.B}, 0.5)`);
+    document.getElementById('image-div').style.backgroundImage = `url(${image})`;
+    console.log(e['R']);
+    document.getElementById('image-div').style.setProperty('--filter', `rgba(${e['R']}, ${e['G']}, ${e['B']}, 0.5)`);
   }
 
   function updatetable(){
@@ -402,8 +406,7 @@
 	    <button id="TriggerFilter">Run Filter Webworker</button>
     </p>
 
-    <div >
-      <img id="image-div" src="https://placem.at/things?h=400&w=400&txt=placeholder" />
+    <div id="image-div">
     </div>
 
     <p>
