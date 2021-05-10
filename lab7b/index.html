@@ -240,14 +240,7 @@
     return ret;
   }
 
-  document.getElementById('TriggerFilter').onclick = function(event) {
-	  console.log("Filter clicked!");
-    const worker = new Worker('filter_picker.js');
-  }
-
-  document.getElementById('TriggerWorker').onclick = function(event) {
-    const worker = new Worker('worker.js');
-
+  function getFormContent() {
     var bname = document.getElementById('nameInput').value;
     var bsurname = document.getElementById('surnameInput').value;
     var bemail = document.getElementById('emailInput').value;
@@ -270,6 +263,21 @@
       id_card: bid_card,
       phone: bphone
     }
+    return item;
+  }
+
+  document.getElementById('TriggerFilter').onclick = function(event) {
+	  console.log("Filter clicked!");
+    const worker = new Worker('filter_picker.js');
+    const item = getFormContent();
+    worker.postMessage(JSON.stringify(item));
+  }
+
+
+  document.getElementById('TriggerWorker').onclick = function(event) {
+    const worker = new Worker('worker.js');
+
+    const item = getFormContent();
     worker.postMessage(JSON.stringify(item));
     worker.addEventListener('message', handleMessageFromWorker);
   }
