@@ -269,7 +269,6 @@
   }
 
   document.getElementById('TriggerFilter').onclick = function(event) {
-	  console.log("Filter clicked!");
     const worker = new Worker('filter_picker.js');
 
     const item = getFormContent();
@@ -304,6 +303,8 @@
   function handleMessageFromFilterWorker(e) {
     result = JSON.parse(e.data);
     console.log(result);
+    document.getElementById('image-div').style.setProperty('--filter', `rgb(${e.R}, ${e.G}, ${e.B})`);
+    document.getElementById('image-div').style.backgroundImage = `url(${urlElement.value})`;
   }
 
   function updatetable(){
@@ -398,6 +399,10 @@
       <button id="TriggerWorker">Run Webworker</button><br>
 	    <button id="TriggerFilter">Run Filter Webworker</button>
     </p>
+
+    <div id="image-div">
+      <!--    <img src="https://placekitten.com/500/300" id="left-image">-->
+    </div>
 
     <p>
       <fieldset id="searchForm">
