@@ -241,7 +241,6 @@
   }
 
   document.getElementById('TriggerWorker').onclick = function(event) {
-    console.log("clicked!");
     const worker = new Worker('worker.js');
 
     var bname = document.getElementById('nameInput').value;
@@ -320,6 +319,11 @@
     };
   }
 
+  document.getElementById('TriggerFilter').onclick = function(event) {
+	  console.log("Filter clicked!");
+    const worker = new Worker('filter_picker.js');
+  }
+
 </script>
 </head>
 
@@ -367,11 +371,15 @@
 
           <label for="phoneNumber">Phone number *</label>
           <input required type="text" id="phoneInput" placeholder="123-123-123" name="phone_number" pattern="[0-9]{3}(-)?[0-9]{3}(-)?[0-9]{3}" title="NNN-NNN-NNN or NNNNNNNNN format"><br><br>
+
+		  <label for="image">Image URL (JPG format)</label>
+          <input required type="text" id="imageInput" placeholder="example.com/image.jpg" name="image" pattern="((https?:\/\/(?:www\.|(?!www)))?[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|(www\.)?[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|(https?:\/\/(?:www\.|(?!www)))?[a-zA-Z0-9]+\.[^\s]{2,}|(www\.)?[a-zA-Z0-9]+\.[^\s]{2,})" title="Correct url"><br><br>
           <button type="submit" id="addButton">Add</button>
         </fieldset>
       </form>
       <button id="generateButton">Generate Random Data</button><br>
-      <button id="TriggerWorker">Run Webworker</button>
+      <button id="TriggerWorker">Run Webworker</button><br>
+	  <button id="TriggerFilter">Run Filter Webworker</button>
     </p>
 
     <p>
