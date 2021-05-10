@@ -309,7 +309,7 @@
     result = JSON.parse(e.data);
     console.log(result);
     var image = document.getElementById('imageInput').value;
-    document.getElementById('image-div').src = `url(${image})`;
+    document.getElementById('image-div').src = image;
     document.getElementById('image-div').style.setProperty('--filter', `rgba(${e.R}, ${e.G}, ${e.B}, 0.5)`);
   }
 
