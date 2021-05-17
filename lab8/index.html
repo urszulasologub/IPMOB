@@ -136,6 +136,22 @@
     updatetable();
   }
 
+  document.getElementById('imageButton').onclick = function(e) {
+    var id = parseInt(document.getElementById('previewInput').value);
+    console.log(id);
+    var request = db.transaction(["clients"], "readwrite").objectStore("clients").get(id);
+    console.log(request);
+    request.onsuccess = function(event){
+      cursor = event.target.result;
+      var image_url = cursor['image'];
+      if (!image_url || image_url.lenght < 1) {
+        window.alert("Record doesn't exist or doesn't contain any image!");
+      }
+      console.log(image_url);
+    }
+
+  }
+
   document.getElementById('filterButton').onclick = function(e){
     var filter = document.getElementById('filterInput').value;
     if (!filter) {
@@ -409,7 +425,7 @@
         </div>
         <legend>Image</legend>
         <br><label>ID</label>
-        <input id="imageButton">
+        <input id="previewInput">
         <button id="imageButton">Show</button>
       </fieldset>
     </p>
