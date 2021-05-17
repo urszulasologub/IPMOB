@@ -77,7 +77,7 @@
     var bcompany = document.getElementById('companyInput').value;
     var bid_card = document.getElementById('idCardInput').value;
     var bphone = document.getElementById('phoneInput').value;
-    var bimage = document.querySelector('canvas');
+    var bimage = document.getElementById('imageInput').value;
     
     if (!bname || !bsurname || !bemail || !baddress || !bcity || !bpostal || !bphone) {
       window.alert("Fill the form correctly!");
@@ -102,7 +102,7 @@
             company: bcompany,
             id_card: bid_card,
             phone: bphone,
-            image: bimage.toDataURL("image/jpeg")
+            image: bimage
           }
           var id_del = bid;
           var transaction = db.transaction(["clients"], "readwrite");
@@ -136,7 +136,7 @@
         company: bcompany,
         id_card: bid_card,
         phone: bphone,
-        image: bimage.toDataURL("image/jpeg")
+        image: bimage
       }
       var transaction = db.transaction(["clients"], "readwrite");
       transaction.oncomplete = function(event) {
@@ -284,6 +284,7 @@
       phone: cursor['phone'],
       image: cursor['image']
     }
+    console.log(item);
     return item;
   }
 
@@ -298,7 +299,7 @@
     var bcompany = document.getElementById('companyInput').value;
     var bid_card = document.getElementById('idCardInput').value;
     var bphone = document.getElementById('phoneInput').value;
-    var bimage = document.querySelector('canvas');
+    var bimage = document.getElementById('imageInput').value;
     const item = {
       name: bname,
       surname: bsurname,
@@ -310,7 +311,7 @@
       company: bcompany,
       id_card: bid_card,
       phone: bphone,
-      image: bimage.toDataURL("image/jpeg")
+      image: bimage
     }
     return item;
   }
@@ -352,7 +353,7 @@
   function handleMessageFromFilterWorker(e) {
     var result = JSON.parse(e.data);
     var image = document.getElementById('imageInput').value;
-    document.getElementById('image-div').style.setProperty('--filter', `rgb(${result.R}, ${result.G}, ${result.B})`);
+    document.getElementById('image-div').style.setProperty('--filter', `rgba(${result.R}, ${result.G}, ${result.B}, 0.5)`);
     document.getElementById('image-div').style.backgroundImage = `url('${image}')`;
     showImagePreview(image, `rgba(${result.R}, ${result.G}, ${result.B}, 0.5)`);
   }
