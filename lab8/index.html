@@ -270,25 +270,21 @@
     return ret;
   }
 
-  function getRecordContent(id) {
-    var request = db.transaction(["clients"], "readwrite").objectStore("clients").get(id);
-    request.onsuccess = function(event){
-      cursor = event.target.result;
-      const item = {
-        name: cursor['name'],
-        surname: cursor['surname'],
-        email: cursor['email'],
-        address: cursor['address'], 
-        city: cursor['city'],
-        postal: cursor['postal'],
-        nip: cursor['nip'],
-        company: cursor['company'],
-        id_card: cursor['id_card'],
-        phone: cursor['phone'],
-        image: cursor['image']
-      }
-      return item;
+  function getRecordContent(cursor) {
+    const item = {
+      name: cursor['name'],
+      surname: cursor['surname'],
+      email: cursor['email'],
+      address: cursor['address'], 
+      city: cursor['city'],
+      postal: cursor['postal'],
+      nip: cursor['nip'],
+      company: cursor['company'],
+      id_card: cursor['id_card'],
+      phone: cursor['phone'],
+      image: cursor['image']
     }
+    return item;
   }
 
   function getFormContent() {
@@ -320,10 +316,14 @@
   }
 
   function triggerFilter(id) {
-    const item = getRecordContent(id);
-    const worker = new Worker('filter_picker.js');
-    worker.postMessage(JSON.stringify(item));
-    worker.addEventListener('message', handleMessageFromFilterWorker);
+    var request = db.transaction(["clients"], "readwrite").objectStore("clients").get(id);
+    request.onsuccess = function(event) {
+      cursor = event.target.result;
+      const item = getRecordContent(cursor);
+      const worker = new Worker('filter_picker.js');
+      worker.postMessage(JSON.stringify(item));
+      worker.addEventListener('message', handleMessageFromFilterWorker);
+    }
   }
 
   document.getElementById('TriggerWorker').onclick = function(event) {
