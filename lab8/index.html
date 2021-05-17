@@ -14,7 +14,7 @@
     window.alert("Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.");
   }
 
-  function showImagePreview(image_url, filter="#FFFFFF") {
+  function showImagePreview(image_url, rgba='rgba(0, 0, 0, 0.5)') {
     clearImagePreview();
     var canvas = document.querySelector('canvas');
     var ctx = canvas.getContext('2d');
@@ -22,9 +22,9 @@
     image.src = image_url;
     image.onload = function() {
       ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = filter;
+      ctx.fillStyle = rgba;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
+    } 
   }
 
   function clearImagePreview() {
@@ -349,16 +349,12 @@
     document.getElementById("imageInput").value = result['image'];
   }
 
-  function rgbToHex(r, g, b) {
-    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-  }
-
   function handleMessageFromFilterWorker(e) {
     var result = JSON.parse(e.data);
     var image = document.getElementById('imageInput').value;
     document.getElementById('image-div').style.setProperty('--filter', `rgb(${result.R}, ${result.G}, ${result.B})`);
     document.getElementById('image-div').style.backgroundImage = `url('${image}')`;
-    showImagePreview(image, rgbToHex(result.R, result.G, result.B));
+    showImagePreview(image, `rgba(${result.R}, ${result.G}, ${result.B}, 0.5)`);
   }
 
   function updatetable(){
