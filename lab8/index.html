@@ -14,6 +14,23 @@
     window.alert("Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.");
   }
 
+  function showImagePreview(image_url, filter="#FFFFFF") {
+    clearImagePreview();
+    var canvas = document.querySelector('canvas');
+    var ctx = canvas.getContext('2d');
+    image = new Image();
+    image.onload = function() {
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = filter;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+
+  function clearImagePreview() {
+    var canvas = document.querySelector('canvas');
+    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+  }
+
   function init(){
     var request = window.indexedDB.open("ClientDatabase", 1);
     request.onerror = function(event) {
@@ -59,7 +76,7 @@
     var bcompany = document.getElementById('companyInput').value;
     var bid_card = document.getElementById('idCardInput').value;
     var bphone = document.getElementById('phoneInput').value;
-    var bimage = document.getElementById('imageInput').value;
+    var bimage = document.querySelector('canvas');
     
     if (!bname || !bsurname || !bemail || !baddress || !bcity || !bpostal || !bphone) {
       window.alert("Fill the form correctly!");
@@ -84,7 +101,7 @@
             company: bcompany,
             id_card: bid_card,
             phone: bphone,
-            image: bimage
+            image: bimage.toDataURL("image/jpeg")
           }
           var id_del = bid;
           var transaction = db.transaction(["clients"], "readwrite");
@@ -118,7 +135,7 @@
         company: bcompany,
         id_card: bid_card,
         phone: bphone,
-        image: bimage
+        image: bimage.toDataURL("image/jpeg")
       }
       var transaction = db.transaction(["clients"], "readwrite");
       transaction.oncomplete = function(event) {
@@ -136,20 +153,17 @@
     updatetable();
   }
 
-  document.getElementById('imageButton').onclick = function(e) {
+  document.getElementById('previewButton').onclick = function(e) {
     var id = parseInt(document.getElementById('previewInput').value);
-    console.log(id);
     var request = db.transaction(["clients"], "readwrite").objectStore("clients").get(id);
-    console.log(request);
     request.onsuccess = function(event){
       cursor = event.target.result;
-      var image_url = cursor['image'];
-      if (!image_url || image_url.lenght < 1) {
+      if (!cursor || !cursor['image'] || cursor['image'].lenght < 1) {
         window.alert("Record doesn't exist or doesn't contain any image!");
+        clearImagePreview();
       }
-      console.log(image_url);
+      showImagePreview(cursor['image']);
     }
-
   }
 
   document.getElementById('filterButton').onclick = function(e){
@@ -265,7 +279,7 @@
     var bcompany = document.getElementById('companyInput').value;
     var bid_card = document.getElementById('idCardInput').value;
     var bphone = document.getElementById('phoneInput').value;
-    var bimage = document.getElementById('imageInput').value;
+    var bimage = document.querySelector('canvas');
     const item = {
       name: bname,
       surname: bsurname,
@@ -277,7 +291,7 @@
       company: bcompany,
       id_card: bid_card,
       phone: bphone,
-      image: bimage
+      image: bimage.toDataURL("image/jpeg")
     }
     return item;
   }
@@ -423,10 +437,10 @@
         <div id="image-div">
           <canvas id="canvas"></canvas>
         </div>
-        <legend>Image</legend>
+        <legend>Record Preview</legend>
         <br><label>ID</label>
         <input id="previewInput">
-        <button id="imageButton">Show</button>
+        <button id="previewButton">Show</button>
       </fieldset>
     </p>
 
@@ -435,6 +449,9 @@
         <legend>Search</legend>
         <label>Keyword</label>
         <input id="filterInput">
+        <table>
+          <tbody id="client-preview-body"></tbody>
+        </table>
         <button id="filterButton">Filter</button>
       </fieldset>
     </p>
