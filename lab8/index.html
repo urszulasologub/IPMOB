@@ -40,6 +40,7 @@
     objectStore.createIndex("company", "company", {unique: false});
     objectStore.createIndex("id_card", "id_card", {unique: false});
     objectStore.createIndex("phone", "phone", {unique: false});
+    objectStore.createIndex("image", "image", {unique: false});
     objectStore.transaction.oncomplete = function(event) {
       
     };
@@ -58,7 +59,8 @@
     var bcompany = document.getElementById('companyInput').value;
     var bid_card = document.getElementById('idCardInput').value;
     var bphone = document.getElementById('phoneInput').value;
-
+    var bimage = document.getElementById('imageInput').value;
+    
     if (!bname || !bsurname || !bemail || !baddress || !bcity || !bpostal || !bphone) {
       window.alert("Fill the form correctly!");
       return;
@@ -81,7 +83,8 @@
             nip: bnip,
             company: bcompany,
             id_card: bid_card,
-            phone: bphone
+            phone: bphone,
+            image: bimage
           }
           var id_del = bid;
           var transaction = db.transaction(["clients"], "readwrite");
@@ -114,7 +117,8 @@
         nip: bnip,
         company: bcompany,
         id_card: bid_card,
-        phone: bphone
+        phone: bphone,
+        image: bimage
       }
       var transaction = db.transaction(["clients"], "readwrite");
       transaction.oncomplete = function(event) {
@@ -388,18 +392,27 @@
           <label for="phoneNumber">Phone number *</label>
           <input required type="text" id="phoneInput" placeholder="123-123-123" name="phone_number" pattern="[0-9]{3}(-)?[0-9]{3}(-)?[0-9]{3}" title="NNN-NNN-NNN or NNNNNNNNN format"><br><br>
 
-		      <label for="image">Image URL (JPG format)</label>
+          <label for="image">Image URL (JPG format)</label>
           <input type="text" id="imageInput" placeholder="https://placem.at/places?h=400&w=400" name="image" pattern="((https?:\/\/(?:www\.|(?!www)))?[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|(www\.)?[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|(https?:\/\/(?:www\.|(?!www)))?[a-zA-Z0-9]+\.[^\s]{2,}|(www\.)?[a-zA-Z0-9]+\.[^\s]{2,})" title="Correct url"><br><br>
           <button type="submit" id="addButton">Add</button>
         </fieldset>
       </form>
       <button id="generateButton">Generate Random Data</button><br>
       <button id="TriggerWorker">Run Webworker</button><br>
-	    <button id="TriggerFilter">Run Filter Webworker</button>
+      <button id="TriggerFilter">Run Filter Webworker</button>
     </p>
 
-    <div id="image-div">
-    </div>
+    <p>
+      <fieldset id="imageForm">
+        <div id="image-div">
+          <canvas id="canvas"></canvas>
+        </div>
+        <legend>Image</legend>
+        <br><label>ID</label>
+        <input id="imageButton">
+        <button id="imageButton">Show</button>
+      </fieldset>
+    </p>
 
     <p>
       <fieldset id="searchForm">
