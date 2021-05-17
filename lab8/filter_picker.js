@@ -6,7 +6,8 @@ onmessage = function (e) {
     }
     return sum;
   }
-  
+  console.log(e);
+  console.log(e.data);
   var data = JSON.parse(e.data);
   var sum = 0;
   Object.keys(data).forEach(function (key) { 
