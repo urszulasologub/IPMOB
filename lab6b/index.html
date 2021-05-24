@@ -179,14 +179,8 @@
               + "</td><td>" + cursor.value.company 
               + "</td><td>" + cursor.value.id_card
               + "</td><td>" + cursor.value.phone
-              + "</td><td><button id=\"delButton\" value=\"" + cursor.key + "\">X</button>"
+              + "</td><td><button onclick=\"delButton(" + cursor.key + ")\">X</button>"
               + "</td></tr>";
-              document.getElementById('delButton').onclick = function(e){
-                var id_del = parseInt(document.getElementById('delButton').value);
-                var request = db.transaction(["clients"], "readwrite").objectStore("clients").delete(id_del);
-                document.getElementById('filterInput').value = "";
-                updatetable();
-              }
           }
         try {
           cursor.continue();
@@ -243,14 +237,8 @@
             + "</td><td>" + cursor.value.company 
             + "</td><td>" + cursor.value.id_card
             + "</td><td>" + cursor.value.phone
-            + "</td><td><button id=\"delButton\" value=\"" + cursor.key + "\">X</button>"
+            + "</td><td><button onclick=\"delButton(" + cursor.key + ")\">X</button>"
             + "</td></tr>";
-            document.getElementById('delButton').onclick = function(e){
-              var id_del = parseInt(document.getElementById('delButton').value);
-              var request = db.transaction(["clients"], "readwrite").objectStore("clients").delete(id_del);
-              document.getElementById('filterInput').value = "";
-              updatetable();
-           }
           }
           try {
             cursor.continue();
@@ -258,6 +246,39 @@
       }
     };
   }
+
+  function delButton(id_del) {
+    var request = db.transaction(["clients"], "readwrite").objectStore("clients").delete(id_del);
+    document.getElementById('filterInput').value = "";
+    document.getElementById("clients-table-body").innerHTML = "";
+    var request = db.transaction("clients").objectStore("clients").openCursor();
+    request.onerror = function(event){
+      console.dir(event);
+    };
+    request.onsuccess = function(event){
+      cursor = event.target.result;
+
+      if (cursor) {
+        document.getElementById("clients-table-body").innerHTML += "<tr><td>" + cursor.key + 
+          "</td><td>" + cursor.value.name 
+            + "</td><td>" + cursor.value.surname
+            + "</td><td>" + cursor.value.email
+            + "</td><td>" + cursor.value.address
+            + "</td><td>" + cursor.value.city 
+            + "</td><td>" + cursor.value.postal
+            + "</td><td>" + cursor.value.nip
+            + "</td><td>" + cursor.value.company 
+            + "</td><td>" + cursor.value.id_card
+            + "</td><td>" + cursor.value.phone
+            + "</td><td><button onclick=\"delButton(" + cursor.key + ")\">X</button>"
+            + "</td></tr>";
+          }
+          try {
+            cursor.continue();
+          } catch (Exception) {}
+      }
+    };
+
 
 </script>
 </head>
@@ -333,6 +354,7 @@
             <th>Company</th>
             <th>ID Card</th>
             <th>Phone number</th>
+            <th></th>
           </tr>
         </thead>
         <tbody id="clients-table-body">
