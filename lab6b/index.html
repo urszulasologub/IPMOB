@@ -180,6 +180,7 @@
               + "</td><td>" + cursor.value.id_card
               + "</td><td>" + cursor.value.phone
               + "</td><td><button onclick=\"delButton(" + cursor.key + ")\">X</button>"
+              + "</td><td><button onclick=\"editRecord(" + cursor.key + ")\">Edit</button>"
               + "</td></tr>";
           }
         try {
@@ -238,6 +239,7 @@
             + "</td><td>" + cursor.value.id_card
             + "</td><td>" + cursor.value.phone
             + "</td><td><button onclick=\"delButton(" + cursor.key + ")\">X</button>"
+            + "</td><td><button onclick=\"editRecord(" + cursor.key + ")\">Edit</button>"
             + "</td></tr>";
           }
           try {
@@ -251,7 +253,7 @@
     var request = db.transaction(["clients"], "readwrite").objectStore("clients").delete(id_del);
     document.getElementById('filterInput').value = "";
     document.getElementById("clients-table-body").innerHTML = "";
-    var request = db.transaction("clients").objectStore("clients").openCursor();
+    request = db.transaction("clients").objectStore("clients").openCursor();
     request.onerror = function(event){
       console.dir(event);
     };
@@ -271,12 +273,63 @@
             + "</td><td>" + cursor.value.id_card
             + "</td><td>" + cursor.value.phone
             + "</td><td><button onclick=\"delButton(" + cursor.key + ")\">X</button>"
+            + "</td><td><button onclick=\"editRecord(" + cursor.key + ")\">Edit</button>"
             + "</td></tr>";
           }
           try {
             cursor.continue();
           } catch (Exception) {}
       }
+    };
+
+    function editRecord(id) {
+      var objectStore = db.transaction(["clients"], "readwrite").objectStore("clients");
+      var request = objectStore.get(id);
+      document.getElementById('filterInput').value = "";
+      document.getElementById("clients-table-body").innerHTML = "";
+      request.onsuccess = function(event) {
+        var result = event.target.result;
+        console.log(result);
+        document.getElementById("idInput").value = id.toString();
+        document.getElementById("nameInput").value = result.name;
+        document.getElementById("surnameInput").value = result.surname;
+        document.getElementById("emailInput").value = result.email;
+        document.getElementById("addressInput").value = result.address;
+        document.getElementById("cityInput").value = result.city;
+        document.getElementById("postalInput").value = result.postal;
+        document.getElementById("companyInput").value = result.company;
+        document.getElementById("phoneInput").value = result.phone;
+        document.getElementById("nipInput").value = result.nip;
+        document.getElementById("idCardInput").value = result.id_card;
+      }
+      document.getElementById("clients-table-body").innerHTML = "";
+      request = db.transaction("clients").objectStore("clients").openCursor();
+      request.onerror = function(event){
+        console.dir(event);
+      };
+      request.onsuccess = function(event){
+        cursor = event.target.result;
+
+        if (cursor) {
+          document.getElementById("clients-table-body").innerHTML += "<tr><td>" + cursor.key + 
+            "</td><td>" + cursor.value.name 
+              + "</td><td>" + cursor.value.surname
+              + "</td><td>" + cursor.value.email
+              + "</td><td>" + cursor.value.address
+              + "</td><td>" + cursor.value.city 
+              + "</td><td>" + cursor.value.postal
+              + "</td><td>" + cursor.value.nip
+              + "</td><td>" + cursor.value.company 
+              + "</td><td>" + cursor.value.id_card
+              + "</td><td>" + cursor.value.phone
+              + "</td><td><button onclick=\"delButton(" + cursor.key + ")\">X</button>"
+              + "</td><td><button onclick=\"editRecord(" + cursor.key + ")\">Edit</button>"
+              + "</td></tr>";
+          }
+          try {
+            cursor.continue();
+          } catch (Exception) {}
+      } 
     };
 
 
@@ -293,9 +346,7 @@
         <fieldset id="addForm">
           <legend>Add item</legend>
 
-          <label>ID</label>
-          <input id="idInput"><br>
-          <small>(Fill up to edit an existing record)</small><br><br>
+          <input id="idInput" type="hidden"><br>
 
           <label>Name *</label>
           <input id="nameInput" placeholder="Jan" required><br><br>
@@ -354,6 +405,7 @@
             <th>Company</th>
             <th>ID Card</th>
             <th>Phone number</th>
+            <th></th>
             <th></th>
           </tr>
         </thead>
