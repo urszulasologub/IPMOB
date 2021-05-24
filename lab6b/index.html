@@ -188,7 +188,9 @@
                 updatetable();
               }
           }
-        cursor.continue();
+        try {
+          cursor.continue();
+        } catch (Exception) {}
       }
     };
   }
@@ -248,7 +250,9 @@
               updatetable();
            }
           }
-          cursor.continue();
+          try {
+            cursor.continue();
+          } catch (Exception) {}
       }
     };
   }
