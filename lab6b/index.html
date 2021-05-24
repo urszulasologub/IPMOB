@@ -139,7 +139,7 @@
     updatetable();
   }
 
-  document.getElementById('filterButton').onclick = function(e){
+  function inputFilter(e) {
     var filter = document.getElementById('filterInput').value;
     if (!filter) {
       filter = "";
@@ -194,6 +194,8 @@
       }
     };
   }
+
+  document.getElementById('filterInput').addEventListener("input", inputFilter);
 
   function randomText(textArray) {
     var randomIndex = Math.floor(Math.random() * textArray.length); 
@@ -314,7 +316,6 @@
         <legend>Search</legend>
         <label>Keyword</label>
         <input id="filterInput">
-        <button id="filterButton">Filter</button>
       </fieldset>
     </p>
 
