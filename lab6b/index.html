@@ -289,7 +289,6 @@
       document.getElementById("clients-table-body").innerHTML = "";
       request.onsuccess = function(event) {
         var result = event.target.result;
-        console.log(result);
         document.getElementById("idInput").value = id.toString();
         document.getElementById("nameInput").value = result.name;
         document.getElementById("surnameInput").value = result.surname;
