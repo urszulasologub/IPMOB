@@ -8,7 +8,26 @@
 		var text = "Thank you for making a purchase in our shop!<br>";
 		text += "<br><br><b>Data</b><br>";
 		text += `<b>Name:</b> ${urlParams.get('name')}<br><b>Surname:</b> ${urlParams.get('surname')}<br>`;
-		text += `<b>Address: </b> ${urlParams.get('address')}`;
+		text += `<b>Address: </b> ${urlParams.get('address')}<br><br>`;
+
+		text += "<b>Products</b><br>";
+		var price = 0;
+		const laptop = urlParams.get('laptop');
+		const tablet = urlParams.get('tablet');
+		const phone = urlParams.get('phone');
+		if (laptop == "true") {
+			price += 2000;
+			text += "- Laptop - $2000<br>";
+		}
+		if (phone == "true") {
+			price += 700;
+			text += "- Phone - $700<br>";
+		}
+		if (tablet == "true") {
+			price += 400;
+			text += "- Tablet - $400<br>";
+		}
+		text += `<br><b>Total: </b> $${price}`
 		document.getElementById("data").innerHTML = text;
 	</script>
 </html>
