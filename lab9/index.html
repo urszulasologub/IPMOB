@@ -21,6 +21,15 @@
     window.alert("Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.");
   }
 
+  function idInputCheck() {
+    var bid = document.getElementById('idInput').value;
+    if (bid) {
+      document.getElementById('purchase-button').disabled = false;
+    } else {
+      document.getElementById('purchase-button').disabled = true;
+    }
+  }
+
   function init(){
     var request = window.indexedDB.open("ClientDatabase", 1);
     request.onerror = function(event) {
@@ -136,6 +145,7 @@
         console.log("added item");
       };
     }
+    idInputCheck();
     updatetable();
   }
 
@@ -205,6 +215,8 @@
   }
 
   document.getElementById('generateButton').onclick = function(e) {
+    document.getElementById("idInput").value = "";
+    idInputCheck();
     document.getElementById("nameInput").value = randomText(['Mariusz', 'Monika', 'Jan', 'Stefan', 'Ala', 'Ela', 'Ola', 'Ula', 'Marcin', 'Waldek', 'Piotr', 'Tomasz']);
     document.getElementById("surnameInput").value = randomText(['Pudzianowski', 'Najman', 'Paździoch', 'Kowalski', 'Nowak', 'Duch', 'Jaworski', 'Drzymała', 'Welfle']);
     document.getElementById("emailInput").value = Math.random().toString(36).substring(2, 5) + Math.random().toString(36).substring(2, 5) + '@gmail.com';
@@ -300,6 +312,7 @@
         document.getElementById("phoneInput").value = result.phone;
         document.getElementById("nipInput").value = result.nip;
         document.getElementById("idCardInput").value = result.id_card;
+        idInputCheck();
       }
       document.getElementById("clients-table-body").innerHTML = "";
       request = db.transaction("clients").objectStore("clients").openCursor();
@@ -339,21 +352,6 @@
   
     <h1>Clients Database</h1>
     Please, reset you database in your browser, because database structure has changed since last laboratories
-
-    <p>
-      <form id="productsForm">
-        <fieldset id="chooseProducts">
-          <input type="checkbox" id="product-laptop" name="product-laptop">
-          <label for="product-laptop">Laptop $2000</label><br>
-
-          <input type="checkbox" id="product-phone" name="product-phone">
-          <label for="product-phone">Phone $700</label><br>
-
-          <input type="checkbox" id="tablet-phone" name="tablet-phone">
-          <label for="tablet-phone">Tablet $400</label><br>
-        </fieldset>
-      </form>
-    </p>
 
     <p>
       <form id="addClientForm">
@@ -403,6 +401,25 @@
         <label>Keyword</label>
         <input id="filterInput">
       </fieldset>
+    </p>
+
+    <p>
+      <form id="productsForm">
+        <fieldset id="chooseProducts">
+          Pick a client (from the table below) to make a purchase<br><br>
+
+          <input type="checkbox" id="product-laptop" name="product-laptop">
+          <label for="product-laptop">Laptop $2000</label><br>
+
+          <input type="checkbox" id="product-phone" name="product-phone">
+          <label for="product-phone">Phone $700</label><br>
+
+          <input type="checkbox" id="tablet-phone" name="tablet-phone">
+          <label for="tablet-phone">Tablet $400</label><br><br>
+
+          <button type="button" id="purchase-button" disabled>Buy</button>
+        </fieldset>
+      </form>
     </p>
 
     <table id="clients-table">
