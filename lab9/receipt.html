@@ -1,3 +1,14 @@
 <html>
-	<h1>Faktura</h1>
+	<h1>Receipt</h1>
+	<p id="data">
+
+	</p>
+	<script>
+		const urlParams = new URLSearchParams(window.location.search);
+		var text = "Thank you for making a purchase in our shop!<br>";
+		text += "<br><br><b>Data</b><br>";
+		text += `<b>Name:</b> ${urlParams.get('name')}<br><b>Surname:</b> ${urlParams.get('surname')}<br>`;
+		text += `<b>Address: </b> ${urlParams.get('address')}`;
+		document.getElementById("data").innerHTML = text;
+	</script>
 </html>
