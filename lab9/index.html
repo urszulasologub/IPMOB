@@ -180,7 +180,7 @@
               + "</td><td>" + cursor.value.id_card
               + "</td><td>" + cursor.value.phone
               + "</td><td><button onclick=\"delButton(" + cursor.key + ")\">X</button>"
-              + "</td><td><button onclick=\"editRecord(" + cursor.key + ")\">Edit</button>"
+              + "</td><td><button onclick=\"editRecord(" + cursor.key + ")\">Pick</button>"
               + "</td></tr>";
           }
         try {
@@ -239,7 +239,7 @@
             + "</td><td>" + cursor.value.id_card
             + "</td><td>" + cursor.value.phone
             + "</td><td><button onclick=\"delButton(" + cursor.key + ")\">X</button>"
-            + "</td><td><button onclick=\"editRecord(" + cursor.key + ")\">Edit</button>"
+            + "</td><td><button onclick=\"editRecord(" + cursor.key + ")\">Pick</button>"
             + "</td></tr>";
           }
           try {
@@ -273,7 +273,7 @@
             + "</td><td>" + cursor.value.id_card
             + "</td><td>" + cursor.value.phone
             + "</td><td><button onclick=\"delButton(" + cursor.key + ")\">X</button>"
-            + "</td><td><button onclick=\"editRecord(" + cursor.key + ")\">Edit</button>"
+            + "</td><td><button onclick=\"editRecord(" + cursor.key + ")\">Pick</button>"
             + "</td></tr>";
           }
           try {
@@ -322,7 +322,7 @@
               + "</td><td>" + cursor.value.id_card
               + "</td><td>" + cursor.value.phone
               + "</td><td><button onclick=\"delButton(" + cursor.key + ")\">X</button>"
-              + "</td><td><button onclick=\"editRecord(" + cursor.key + ")\">Edit</button>"
+              + "</td><td><button onclick=\"editRecord(" + cursor.key + ")\">Pick</button>"
               + "</td></tr>";
           }
           try {
@@ -341,9 +341,24 @@
     Please, reset you database in your browser, because database structure has changed since last laboratories
 
     <p>
+      <form id="productsForm">
+        <fieldset id="chooseProducts">
+          <input type="checkbox" id="product-laptop" name="product-laptop">
+          <label for="product-laptop">Laptop $2000</label><br>
+
+          <input type="checkbox" id="product-phone" name="product-phone">
+          <label for="product-phone">Phone $700</label><br>
+
+          <input type="checkbox" id="tablet-phone" name="tablet-phone">
+          <label for="tablet-phone">Tablet $400</label><br>
+        </fieldset>
+      </form>
+    </p>
+
+    <p>
       <form id="addClientForm">
         <fieldset id="addForm">
-          <legend>Add item</legend>
+          <legend>Add person</legend>
 
           <input id="idInput" type="hidden"><br>
 
