@@ -200,6 +200,32 @@
     };
   }
 
+  function buy() {
+    var bid = document.getElementById('idInput').value;
+    var bname = document.getElementById('nameInput').value;
+    var bsurname = document.getElementById('surnameInput').value;
+    var bemail = document.getElementById('emailInput').value;
+    var baddress = document.getElementById('addressInput').value;
+    var bcity = document.getElementById('cityInput').value;
+    var bpostal = document.getElementById('postalInput').value;
+    var bnip = document.getElementById('nipInput').value;
+    var bcompany = document.getElementById('companyInput').value;
+    var bid_card = document.getElementById('idCardInput').value;
+    var bphone = document.getElementById('phoneInput').value;
+    var laptop = document.getElementById('product-laptop').checked;
+    var tablet = document.getElementById('product-tablet').checked;
+    var phone = document.getElementById('product-phone').checked;
+    if (!laptop && !tablet && !phone) {
+      window.alert("Choose a product!");
+    } else {
+      location.replace(`receipt.html?name=${bname}?surname=${bsurname}?address=${baddress}%20${bcity}%20${bpostal}?laptop=${laptop}?tablet=${tablet}?phone=${phone}`);
+    }
+  }
+
+  document.getElementById('purchase-button').onclick = function(e) {
+    buy();
+  }
+
   document.getElementById('filterInput').addEventListener("input", inputFilter);
 
   function randomText(textArray) {
@@ -414,8 +440,8 @@
           <input type="checkbox" id="product-phone" name="product-phone">
           <label for="product-phone">Phone $700</label><br>
 
-          <input type="checkbox" id="tablet-phone" name="tablet-phone">
-          <label for="tablet-phone">Tablet $400</label><br><br>
+          <input type="checkbox" id="product-tablet" name="product-tablet">
+          <label for="product-tablet">Tablet $400</label><br><br>
 
           <button type="button" id="purchase-button" disabled>Buy</button>
         </fieldset>
